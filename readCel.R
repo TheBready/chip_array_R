@@ -1,6 +1,5 @@
 
-# Installieren der benötigten Pakete
-#test
+#Installieren der benötigten Pakete
 #source("http://bioconductor.org/biocLite.R")
 #biocLite("affy")
 
