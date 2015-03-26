@@ -1,4 +1,9 @@
-
+######################################
+#       Einlesen .CEL-Dateien        #
+#               von                  #
+#     Nadine, Felix und Philipp      #
+#             Gruppe 2               #
+######################################
 # Installieren der benötigten Pakete
 #source("http://bioconductor.org/biocLite.R")
 #biocLite("affy")
