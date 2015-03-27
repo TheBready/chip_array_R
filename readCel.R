@@ -38,7 +38,7 @@ PNGnames <- gsub('.{3}$', 'png', CELnames)
 colors <- rainbow(length(CELnames))
 for(i in 1:length(CELnames)){
   png(filename= PNGnames[i])
-  hist(log(intensity(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)")
+  hist(log(intensity(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
   dev.off()
 }
 
