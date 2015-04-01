@@ -8,9 +8,12 @@
 #source("http://bioconductor.org/biocLite.R")
 #biocLite("affy")
 #biocLite("hgu133plus2.db") # Chip-Datenbank
+#biocLite("affyQCReport")
+
 
 
 # Laden von affy
+library("affyQCReport")
 library("affy")
 library("hgu133plus2.db")
 
@@ -128,6 +131,19 @@ for(j in 1:length(dir)){
   plotDensity.AffyBatch(data, col = 1:length(CELnames), log = TRUE, which=c("pm","mm","both"),ylab = "density", main = dir[j])
   legend("topright",col=1:length(CELnames),lwd=1,legend=CELnames, bty="n")
   dev.off()
+
+# Correlation plot
+  setwd("..")
+  dir.create("correlation_plot", showWarnings = FALSE)
+  setwd("correlation_plot")  
+  QCReport(data)
+  png(filename = "correlation_plot_notNormalized.png")
+  correlationPlot(data)
+  dev.off()
+  png(filename = "correlation_plot_normalized.png")
+  correlationPlot(data.mas5)
+  dev.off()
+  #correlationPlot(as.matrix(exprs(data.rma)))
 
 
 # Ende eines Experiment -> Verlasse Ordner
