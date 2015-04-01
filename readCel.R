@@ -252,7 +252,7 @@ for(j in 1:length(dir)){
   plot(data.mas5exp["1553602_at",],type ="l", main = "Ein Gen über alle Chips - MAS 5.0",ylab = "Intesität", xlab= "Micro-Chip")
   dev.off()
   data.ps <- probeset(data, genenames="1553602_at")
-  data.psmean <- colMeans(pm(ps[[1]]))
+  data.psmean <- colMeans(pm(data.ps[[1]]))
   png(filename = "one_gene_plot_mas5.png")
   plot(data.psmean,type ="l", main = "Ein Gen über alle Chips - MAS 5.0",ylab = "Intesität", xlab= "Micro-Chip")
   dev.off()
