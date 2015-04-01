@@ -119,6 +119,16 @@ for(j in 1:length(dir)){
   data.mas5calls <- mas5calls(data)
   write.exprs(data.mas5,file = gsub('.{0}$', '_MAS5_500.txt', dir[j]))
 
+# Density
+  print("Plote Density")
+  setwd("..")
+  dir.create("density_plot", showWarnings =FALSE)
+  setwd("density_plot") 
+  png(filename= "density_plot")
+  plotDensity.AffyBatch(data, col = 1:length(CELnames), log = TRUE, which=c("pm","mm","both"),ylab = "density", main = dir[j])
+  legend("topright",col=1:length(CELnames),lwd=1,legend=CELnames, bty="n")
+  dev.off()
+
 
 # Ende eines Experiment -> Verlasse Ordner
   print("Bearbeiten des Experimentes beendet")
