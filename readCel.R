@@ -43,8 +43,22 @@ for(j in 1:length(dir)){
   dir.create(dir[j], showWarnings =FALSE)
   setwd(dir[j])
 
+  
+# Write Info
+  dir.create("info", showWarnings =FALSE)
+  setwd("info")
+  # Start writing to an output file
+  sink("info.txt")
+
+  print(data)
+  # Stop writing to the file
+  sink()
+
+  
+
 # RMA
   print("Normalisierung RMA")
+  setwd("..")
   dir.create("RMA", showWarnings =FALSE)
   setwd("RMA")
   data.rma <- rma(data)
