@@ -7,12 +7,16 @@
 # Installieren der benötigten Pakete
 #source("http://bioconductor.org/biocLite.R")
 #biocLite("affy")
+#biocLite("simpleaffy")
+#biocLite("affyPLM")
 #biocLite("hgu133plus2.db") # Chip-Datenbank
 
 
 # Laden von affy
 library("affy")
 library("hgu133plus2.db")
+library(affyPLM)
+
 
 #Einstellen des Pfades
 setwd("../input")
@@ -60,9 +64,25 @@ for(j in 1:length(dir)){
   dir.create("images", showWarnings =FALSE)
   setwd("images")
   for(i in 1:length(PNGnames)){
-    png(filename=PNGnames[j], width = 7500, height = 7500, units = "px")
+    png(filename=PNGnames[i], width = 7500, height = 7500, units = "px")
     image(data[,i])
     dev.off()  
+    data.Pset <- fitPLM(data)
+    png(filename=gsub('.{3}$', '_white.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=i)
+    dev.off() 
+    png(filename=gsub('.{3}$', '_resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=2, type="resids")
+    dev.off()
+    png(filename=gsub('.{3}$', '_pos.resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=2, type="pos.resids",col=pseudoPalette(low="yellow",high="darkblue"))
+    dev.off()
+    png(filename=gsub('.{3}$', '_neg.resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=2, type="neg.resids")
+    dev.off()
+    png(filename=gsub('.{3}$', '_sign.resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=2, type="sign.resids")
+    dev.off()
   }
 
 # Erstellen der BoxPlots
@@ -128,6 +148,11 @@ for(j in 1:length(dir)){
   plotDensity.AffyBatch(data, col = 1:length(CELnames), log = TRUE, which=c("pm","mm","both"),ylab = "density", main = dir[j])
   legend("topright",col=1:length(CELnames),lwd=1,legend=CELnames, bty="n")
   dev.off()
+
+# QC
+  data.qc <- qc(data)
+  data.back <- avbg(data.qc)
+  plot(data.back)
 
 
 # Ende eines Experiment -> Verlasse Ordner
