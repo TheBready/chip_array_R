@@ -154,24 +154,6 @@ for(j in 1:length(dir)){
   write.table(data.mm, file = gsub('.{0}$', '_signals_MM.txt', dir[j]), row.names=TRUE)
 
 
-# RMA
-  print("Normalisierung RMA")
-  setwd("..")
-  dir.create("RMA", showWarnings =FALSE)
-  setwd("RMA")
-  data.rma <- rma(data)
-  write.exprs(data.rma,file = gsub('.{0}$', '_signals_RMA.txt', dir[j]))
-
-# MAS 5.0
-  print("Normalisierung MAS 5.0")
-  setwd("..")
-  dir.create("MAS5", showWarnings =FALSE)
-  setwd("MAS5")
-  data.mas5 <- mas5(data, sc = 500)
-  data.mas5exp <- exprs(data.mas5)
-  data.mas5calls <- mas5calls(data)
-  write.exprs(data.mas5,file = gsub('.{0}$', '_MAS5_500.txt', dir[j]))
-
 # Density
   print("Plot Density")
   setwd("..")
@@ -182,10 +164,6 @@ for(j in 1:length(dir)){
   legend("topright",col=1:length(CELnames),lwd=1,legend=CELnames, bty="n")
   dev.off()
 
-# QC
-  data.qc <- qc(data)
-  data.back <- avbg(data.qc)
-  plot(data.back)
 
 # Clustering 
   # raw data
