@@ -51,6 +51,10 @@ for(j in 1:length(dir)){
   sink("info.txt")
 
   print(data)
+
+  print(phenoData(data))
+
+  print(pData(data))
   # Stop writing to the file
   sink()
 
@@ -219,6 +223,23 @@ for(j in 1:length(dir)){
   dev.off()
   #correlationPlot(as.matrix(exprs(data.rma)))
 
+# one gene over all chips
+  print("Es wird ein Gen über alle Chips geplottet")
+  setwd("..")
+  dir.create("one_gene_plot", showWarnings = FALSE)
+  setwd("one_gene_plot")  
+  data.probeset <- probeset(data)
+  png(filename = "one_gene_plot_rma.png")
+  plot(data.rmaexp["1553602_at",],type ="l", main = "Ein Gen über alle Chips - RMA",ylab = "Intesität", xlab= "Micro-Chip")
+  dev.off()
+  png(filename = "one_gene_plot_mas5.png")
+  plot(data.mas5exp["1553602_at",],type ="l", main = "Ein Gen über alle Chips - MAS 5.0",ylab = "Intesität", xlab= "Micro-Chip")
+  dev.off()
+  data.ps <- probeset(data, genenames="1553602_at")
+  data.psmean <- colMeans(pm(ps[[1]]))
+  png(filename = "one_gene_plot_mas5.png")
+  plot(data.psmean,type ="l", main = "Ein Gen über alle Chips - MAS 5.0",ylab = "Intesität", xlab= "Micro-Chip")
+  dev.off()
 
 
 # Ende eines Experiment -> Verlasse Ordner
