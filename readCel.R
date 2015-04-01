@@ -7,7 +7,6 @@
 # Installieren der benötigten Pakete
 #source("http://bioconductor.org/biocLite.R")
 #biocLite("affy")
-#biocLite("simpleaffy")
 #biocLite("affyPLM")
 #biocLite("hgu133plus2.db") # Chip-Datenbank
 
@@ -15,7 +14,7 @@
 # Laden von affy
 library("affy")
 library("hgu133plus2.db")
-library(affyPLM)
+library("affyPLM")
 
 
 #Einstellen des Pfades
@@ -68,8 +67,14 @@ for(j in 1:length(dir)){
     image(data[,i])
     dev.off()  
     data.Pset <- fitPLM(data)
-    png(filename=gsub('.{3}$', '_white.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_topo.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
     image(data.Pset,which=i)
+    dev.off()
+    png(filename=gsub('.{3}$', '_heat.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=i,col=pseudoPalette(low="yellow",high="red"))
+    dev.off()
+    png(filename=gsub('.{3}$', '_palm.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    image(data.Pset,which=i,col=pseudoPalette(low="green",high="blue"))
     dev.off() 
     png(filename=gsub('.{3}$', '_resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
     image(data.Pset,which=2, type="resids")
@@ -140,11 +145,11 @@ for(j in 1:length(dir)){
   write.exprs(data.mas5,file = gsub('.{0}$', '_MAS5_500.txt', dir[j]))
 
 # Density
-  print("Plote Density")
+  print("Plot Density")
   setwd("..")
   dir.create("density_plot", showWarnings =FALSE)
   setwd("density_plot") 
-  png(filename= "density_plot")
+  png(filename= "density_plot.png")
   plotDensity.AffyBatch(data, col = 1:length(CELnames), log = TRUE, which=c("pm","mm","both"),ylab = "density", main = dir[j])
   legend("topright",col=1:length(CELnames),lwd=1,legend=CELnames, bty="n")
   dev.off()
@@ -153,6 +158,34 @@ for(j in 1:length(dir)){
   data.qc <- qc(data)
   data.back <- avbg(data.qc)
   plot(data.back)
+
+# Clustering 
+  # raw data
+  print("Erstelle hieraisches Clustering")
+  setwd("..")
+  dir.create("hiera_clust", showWarnings =FALSE)
+  setwd("hiera_clust") 
+  data.dist = as.matrix(t(data.exp))
+  data.dist = dist(data.dist,method="euclidean")
+  data.cluster = hclust(data.dist, method="average" )
+  png(filename="hc_raw.png")
+  plot(data.cluster, main= "hieraisches Clustering der Daten - Rohdaten", xlab="Distanz", ylab="Höhe")
+  dev.off()
+  # RMA data
+  data.dist = as.matrix(t(exprs(data.rma)))
+  data.dist = dist(data.dist,method="euclidean")
+  data.cluster = hclust(data.dist, method="average" )
+  png(filename="hc_rma.png")
+  plot(data.cluster, main= "hieraisches Clustering der Daten - RMA-Daten", xlab="Distanz", ylab="Höhe")
+  dev.off()
+  # MaAS data
+  data.dist = as.matrix(t(exprs(data.mas5)))
+  data.dist = dist(data.dist,method="euclidean")
+  data.cluster = hclust(data.dist, method="average" )
+  png(filename="hc_mas.png")
+  plot(data.cluster, main= "hieraisches Clustering der Daten - MAS 5.0-Daten", xlab="Distanz", ylab="Höhe")
+  dev.off()
+
 
 
 # Ende eines Experiment -> Verlasse Ordner
