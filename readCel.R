@@ -9,12 +9,9 @@
 #biocLite("affy")
 #biocLite("affyPLM")
 #biocLite("hgu133plus2.db") # Chip-Datenbank
-#biocLite("affyQCReport")
-
 
 
 # Laden von affy
-library("affyQCReport")
 library("affy")
 library("hgu133plus2.db")
 library("affyPLM")
@@ -45,16 +42,43 @@ for(j in 1:length(dir)){
   dir.create(dir[j], showWarnings =FALSE)
   setwd(dir[j])
 
+# RMA
+  print("Normalisierung RMA")
+  dir.create("RMA", showWarnings =FALSE)
+  setwd("RMA")
+  data.rma <- rma(data)
+  data.rmaexp <- exprs(data.rma)
+  write.exprs(data.rma,file = gsub('.{0}$', '_signals_RMA.txt', dir[j]))
+
+# MAS 5.0
+  print("Normalisierung MAS 5.0")
+  setwd("..")
+  dir.create("MAS5", showWarnings =FALSE)
+  setwd("MAS5")
+  data.mas5 <- mas5(data, sc = 500)
+  data.mas5exp <- exprs(data.mas5)
+  data.mas5calls <- mas5calls(data)
+  write.exprs(data.mas5,file = gsub('.{0}$', '_MAS5_500.txt', dir[j]))
 
 # Erstellen der Histgramme
   print("Histogramme")
+  setwd("..")
   dir.create("histograms", showWarnings =FALSE)
   setwd("histograms")
   PNGnames <- gsub('.{3}$', 'png', CELnames)
   colors <- rainbow(length(CELnames))
   for(i in 1:length(CELnames)){
-    png(filename= PNGnames[i])
+    # raw
+    png(filename= gsub('.{3}$', '_raw.png', PNGnames[i]))
     hist(log(intensity(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
+    dev.off()
+    # mas5
+    png(filename= gsub('.{3}$', '_mas5.png', PNGnames[i]))
+    hist(log(data.mas5exp[,i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,2000), xlim = c(0,25))
+    dev.off()
+    # rma
+    png(filename= gsub('.{3}$', '_rma.png', PNGnames[i]))
+    hist(log(data.rmaexp[, i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,1000), xlim = c(0,5))
     dev.off()
   }
 
@@ -157,20 +181,6 @@ for(j in 1:length(dir)){
   legend("topright",col=1:length(CELnames),lwd=1,legend=CELnames, bty="n")
   dev.off()
 
-<<<<<<< HEAD
-# Correlation plot
-  setwd("..")
-  dir.create("correlation_plot", showWarnings = FALSE)
-  setwd("correlation_plot")  
-  QCReport(data)
-  png(filename = "correlation_plot_notNormalized.png")
-  correlationPlot(data)
-  dev.off()
-  png(filename = "correlation_plot_normalized.png")
-  correlationPlot(data.mas5)
-  dev.off()
-  #correlationPlot(as.matrix(exprs(data.rma)))
-=======
 # QC
   data.qc <- qc(data)
   data.back <- avbg(data.qc)
@@ -196,14 +206,13 @@ for(j in 1:length(dir)){
   plot(data.cluster, main= "hieraisches Clustering der Daten - RMA-Daten", xlab="Distanz", ylab="Höhe")
   dev.off()
   # MaAS data
-  data.dist = as.matrix(t(exprs(data.mas5)))
+  data.dist = as.matrix(t(data.mas5exp))
   data.dist = dist(data.dist,method="euclidean")
   data.cluster = hclust(data.dist, method="average" )
   png(filename="hc_mas.png")
   plot(data.cluster, main= "hieraisches Clustering der Daten - MAS 5.0-Daten", xlab="Distanz", ylab="Höhe")
   dev.off()
 
->>>>>>> origin/master
 
 
 # Ende eines Experiment -> Verlasse Ordner
