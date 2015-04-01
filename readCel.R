@@ -9,13 +9,14 @@
 #biocLite("affy")
 #biocLite("affyPLM")
 #biocLite("hgu133plus2.db") # Chip-Datenbank
+#biocLite("affyQCReport")
 
 
 # Laden von affy
 library("affy")
 library("hgu133plus2.db")
 library("affyPLM")
-
+library("affyQCReport")
 
 #Einstellen des Pfades
 setwd("../input")
@@ -212,6 +213,19 @@ for(j in 1:length(dir)){
   png(filename="hc_mas.png")
   plot(data.cluster, main= "hieraisches Clustering der Daten - MAS 5.0-Daten", xlab="Distanz", ylab="Höhe")
   dev.off()
+
+# Correlation plot
+  setwd("..")
+  dir.create("correlation_plot", showWarnings = FALSE)
+  setwd("correlation_plot")  
+  QCReport(data)
+  png(filename = "correlation_plot_notNormalized.png")
+  correlationPlot(data)
+  dev.off()
+  png(filename = "correlation_plot_normalized.png")
+  correlationPlot(data.mas5)
+  dev.off()
+  #correlationPlot(as.matrix(exprs(data.rma)))
 
 
 
