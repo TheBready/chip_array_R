@@ -10,13 +10,16 @@
 #biocLite("affyPLM")
 #biocLite("hgu133plus2.db") # Chip-Datenbank
 #biocLite("affyQCReport")
-
+#biocLite("panp")
 
 # Laden von affy
 library("affy")
 library("hgu133plus2.db")
 library("affyPLM")
 library("affyQCReport")
+library("panp")
+library(gcrma)
+
 
 #Einstellen des Pfades
 setwd("../input")
@@ -58,7 +61,22 @@ for(j in 1:length(dir)){
   # Stop writing to the file
   sink()
 
-  
+# Detection Call
+  print("Detection Call")
+  setwd("..")
+  dir.create("detection_call", showWarnings =FALSE)
+  setwd("detection_call")
+  data.exprsSet <- gcrma(data)
+  data.PA <- pa.calls(data.exprsSet)
+  data.PAcalls <- data.PA$Pcalls
+  data.Pvalues <- data.PA$Pvals
+  PNGnames <- gsub('.{3}$', 'png', CELnames)
+  colors <- rainbow(length(CELnames))
+  for(n in 1:length(CELnames)){
+    png(filename= gsub('.{3}$', '.png', PNGnames[n]))
+    hist(data.Pvalues[,n], breaks = 100,border = F, col=colors[n], main=CELnames[n],ylab="Anzahl",xlab="P-Wert")#, ylim = c(0,150000), xlim = c(3,10))
+    dev.off()  
+  }
 
 # RMA
   print("Normalisierung RMA")
@@ -84,8 +102,6 @@ for(j in 1:length(dir)){
   setwd("..")
   dir.create("histograms", showWarnings =FALSE)
   setwd("histograms")
-  PNGnames <- gsub('.{3}$', 'png', CELnames)
-  colors <- rainbow(length(CELnames))
   for(i in 1:length(CELnames)){
     # raw
     png(filename= gsub('.{3}$', '_raw.png', PNGnames[i]))
