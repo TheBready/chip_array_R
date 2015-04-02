@@ -26,6 +26,10 @@ setwd("../input")
 dir <- dir()
 setwd("..")
 
+#globale Variablen
+
+resolution = 7500
+
 # For-Schleife um alle Experimente im Input Ordner ab zu arbeiten
 for(j in 1:length(dir)){
   print(paste("Bearbeite Experiment:", dir[j], sep=" "))
@@ -125,29 +129,29 @@ for(j in 1:length(dir)){
   dir.create("images", showWarnings =FALSE)
   setwd("images")
   for(i in 1:length(PNGnames)){
-    png(filename=PNGnames[i], width = 7500, height = 7500, units = "px")
+    png(filename=PNGnames[i], width = resolution, height = resolution, units = "px")
     image(data[,i])
     dev.off()  
     data.Pset <- fitPLM(data)
-    png(filename=gsub('.{3}$', '_topo.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_topo.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=i)
     dev.off()
-    png(filename=gsub('.{3}$', '_heat.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_heat.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=i,col=pseudoPalette(low="yellow",high="red"))
     dev.off()
-    png(filename=gsub('.{3}$', '_palm.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_palm.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=i,col=pseudoPalette(low="green",high="blue"))
     dev.off() 
-    png(filename=gsub('.{3}$', '_resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="resids")
     dev.off()
-    png(filename=gsub('.{3}$', '_pos.resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_pos.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="pos.resids",col=pseudoPalette(low="yellow",high="darkblue"))
     dev.off()
-    png(filename=gsub('.{3}$', '_neg.resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_neg.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="neg.resids")
     dev.off()
-    png(filename=gsub('.{3}$', '_sign.resids.png', PNGnames[i]), width = 7500, height = 7500, units = "px")
+    png(filename=gsub('.{3}$', '_sign.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="sign.resids")
     dev.off()
   }
