@@ -61,7 +61,7 @@ writeRMA <- function(data,dir,j){
 ###########
 # MAS 5.0 #
 ###########
-writeMAS5 <- function(data,dir,j,scale){
+writeMAS5 <- function(data,dir,j=1,scale=500){
   print("Normalisierung MAS 5.0")
   dir.create("MAS5", showWarnings =FALSE)
   setwd("MAS5")
@@ -72,7 +72,7 @@ writeMAS5 <- function(data,dir,j,scale){
 }
 
 ############################
-# Erstellen der Histgramme #
+# Erstellen der Histogramme #
 ############################
 histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
   print("Histogramme")
@@ -145,14 +145,31 @@ chipImages <- function(data,PNGnames,resolution){
 ##########################
 # Erstellen der BoxPlots #
 ##########################
-chipBoxplot <- function(data){
+chipBoxplot <- function(data,data.mas5exp,data.rmaexp){
   print("Erstelle Boxplot")
   dir.create("boxplot", showWarnings =FALSE)
   setwd("boxplot")
-  png(filename="boxplot.png")
+  #raw
+  dir.create("raw", showWarnings =FALSE)
+  setwd("raw") 
+  png(filename="boxplot_raw.png")
   boxplot(data, col="red")
-  dev.off()  
+  dev.off() 
   setwd("..")
+  # mas5
+  dir.create("mas5", showWarnings =FALSE)
+  setwd("mas5") 
+  png(filename="boxplot_mas5.png")
+  boxplot(data.mas5exp, col="red")
+  dev.off() 
+  setwd("..")
+  # rma
+  dir.create("rma", showWarnings =FALSE)
+  setwd("rma") 
+  png(filename="boxplot_rma.png")
+  boxplot(data.rmaexp, col="red")
+  dev.off() 
+  setwd("../..")
 }
 
 
@@ -376,7 +393,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     #chipImages(data,PNGnames,resolution)
 
-    #chipBoxplot(data)
+    chipBoxplot(data,data.mas5exp,data.rmaexp)
 
     #rawdata(data,dir,j)
 
