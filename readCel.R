@@ -79,6 +79,7 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
   dir.create("histograms", showWarnings =FALSE)
   setwd("histograms")
   for(i in 1:length(CELnames)){
+    
     # raw
     dir.create("raw", showWarnings =FALSE)
     setwd("raw") 
@@ -86,6 +87,23 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
     hist(log(intensity(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
     dev.off()
     setwd("..")
+    
+    # pm raw
+    dir.create("pm_raw", showWarnings =FALSE)
+    setwd("pm_raw") 
+    png(filename= gsub('.{3}$', '_pm_raw.png', PNGnames[i]))
+    hist(log(pm(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
+    dev.off()
+    setwd("..")
+    
+    # mm_raw
+    dir.create("mm_raw", showWarnings =FALSE)
+    setwd("mm_raw") 
+    png(filename= gsub('.{3}$', '_mm_raw.png', PNGnames[i]))
+    hist(log(mm(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
+    dev.off()
+    setwd("..")
+    
     # mas5
     dir.create("mas5", showWarnings =FALSE)
     setwd("mas5") 
@@ -93,6 +111,7 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
     hist(log(data.mas5exp[,i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,2000), xlim = c(0,25))
     dev.off()
     setwd("..")
+    
     # rma
     dir.create("rma", showWarnings =FALSE)
     setwd("rma") 
@@ -111,33 +130,82 @@ chipImages <- function(data,PNGnames,resolution){
   print("Erstelle Bilder")
   dir.create("images", showWarnings =FALSE)
   setwd("images")
+  data.Pset <- fitPLM(data)
   for(i in 1:length(PNGnames)){
+    
     print(PNGnames[i])
+    #raw
+    dir.create("raw", showWarnings =FALSE)
+    setwd("raw") 
     png(filename=PNGnames[i], width = resolution, height = resolution, units = "px")
     image(data[,i])
     dev.off()  
-    data.Pset <- fitPLM(data)
+    setwd("..")
+    
+    #topo
+    dir.create("topo", showWarnings =FALSE)
+    setwd("topo") 
     png(filename=gsub('.{3}$', '_topo.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=i)
     dev.off()
+    setwd("..")
+    
+    #heat
+    dir.create("heat", showWarnings =FALSE)
+    setwd("heat") 
     png(filename=gsub('.{3}$', '_heat.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=i,col=pseudoPalette(low="yellow",high="red"))
     dev.off()
+    setwd("..")
+    
+    #palm
+    dir.create("palm", showWarnings =FALSE)
+    setwd("palm") 
     png(filename=gsub('.{3}$', '_palm.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=i,col=pseudoPalette(low="green",high="blue"))
     dev.off() 
+    setwd("..")
+    
+    #resids
+    dir.create("resids", showWarnings =FALSE)
+    setwd("resids") 
     png(filename=gsub('.{3}$', '_resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="resids")
     dev.off()
+    setwd("..")
+    
+    #pos.resids
+    dir.create("posResids", showWarnings =FALSE)
+    setwd("posResids") 
     png(filename=gsub('.{3}$', '_pos.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="pos.resids",col=pseudoPalette(low="yellow",high="darkblue"))
     dev.off()
+    setwd("..")
+    
+    #neg.resids
+    dir.create("negResids", showWarnings =FALSE)
+    setwd("negResids") 
     png(filename=gsub('.{3}$', '_neg.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="neg.resids")
     dev.off()
+    setwd("..")
+    
+    #sign.resids
+    dir.create("signResids", showWarnings =FALSE)
+    setwd("signResids") 
     png(filename=gsub('.{3}$', '_sign.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
     image(data.Pset,which=2, type="sign.resids")
     dev.off()
+    setwd("..")
+    
+    #sign.resids
+    dir.create("weight", showWarnings =FALSE)
+    setwd("weight") 
+    png(filename=gsub('.{3}$', '_weight.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
+    image(data.Pset,which=2, type="weight")
+    dev.off()
+    setwd("..")
+    
   }
   setwd("..")
 }
@@ -149,6 +217,7 @@ chipBoxplot <- function(data,data.mas5exp,data.rmaexp){
   print("Erstelle Boxplot")
   dir.create("boxplot", showWarnings =FALSE)
   setwd("boxplot")
+  
   #raw
   dir.create("raw", showWarnings =FALSE)
   setwd("raw") 
@@ -156,6 +225,7 @@ chipBoxplot <- function(data,data.mas5exp,data.rmaexp){
   boxplot(data, col="red")
   dev.off() 
   setwd("..")
+  
   # mas5
   dir.create("mas5", showWarnings =FALSE)
   setwd("mas5") 
@@ -163,6 +233,7 @@ chipBoxplot <- function(data,data.mas5exp,data.rmaexp){
   boxplot(data.mas5exp, col="red")
   dev.off() 
   setwd("..")
+  
   # rma
   dir.create("rma", showWarnings =FALSE)
   setwd("rma") 
@@ -226,6 +297,7 @@ chipDensity <- function(data,CELnames){
 # Clustering #
 ##############
 chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
+  
   # raw data
   print("Erstelle hieraisches Clustering")
   dir.create("hiera_clust", showWarnings =FALSE)
@@ -236,6 +308,7 @@ chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
   png(filename="hc_raw.png")
   plot(data.cluster, main= "hieraisches Clustering der Daten - Rohdaten", xlab="Distanz", ylab="Höhe")
   dev.off()
+  
   # RMA data
   data.dist = as.matrix(t(data.rmaexp))
   data.dist = dist(data.dist,method="euclidean")
@@ -243,6 +316,7 @@ chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
   png(filename="hc_rma.png")
   plot(data.cluster, main= "hieraisches Clustering der Daten - RMA-Daten", xlab="Distanz", ylab="Höhe")
   dev.off()
+  
   # MaAS data
   data.dist = as.matrix(t(data.mas5exp))
   data.dist = dist(data.dist,method="euclidean")
@@ -382,18 +456,18 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     #detectionCall(data,PNGnames,colors)
 
-    data.rma <- writeRMA(data,dir,j)
-    data.rmaexp <- exprs(data.rma)
+    #data.rma <- writeRMA(data,dir,j)
+    #data.rmaexp <- exprs(data.rma)
 
-    data.mas5 <- writeMAS5(data,dir,j,scale)
-    data.mas5exp <- exprs(data.mas5)
+    #data.mas5 <- writeMAS5(data,dir,j,scale)
+    #data.mas5exp <- exprs(data.mas5)
     #data.mas5calls <- mas5calls(data)
 
-    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+    #histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
 
-    #chipImages(data,PNGnames,resolution)
+    chipImages(data,PNGnames,resolution)
 
-    chipBoxplot(data,data.mas5exp,data.rmaexp)
+    #chipBoxplot(data,data.mas5exp,data.rmaexp)
 
     #rawdata(data,dir,j)
 
