@@ -382,6 +382,42 @@ geneOverAll <- function(data,data.rmaexp,data.mas5exp){
 }
 
 
+###############
+# Scatterplot #
+###############
+chipScatter <- function(data,data.rmaexp){
+  print("Scatterplot")
+  dir.create("scatterplot", showWarnings = FALSE)
+  setwd("scatterplot") 
+  png(filename = "scatterplot-test.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+  trad.scatter.plot(log(rowMeans(exprs(data)[,1:3])),log(rowMeans(exprs(data)[,1:3])), main = "TNF vs. no TNF", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+  dev.off()
+  #raw
+  if(length(colnames(data))<=6){
+    png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    trad.scatter.plot(log(rowMeans(exprs(data)[,1:3])),log(rowMeans(exprs(data)[,4:6])), main = "TNF vs. no TNF(raw)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+    dev.off()
+  }
+  else{
+    png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    trad.scatter.plot(log(rowMeans(exprs(data)[,1:4])),log(rowMeans(exprs(data)[,5:7])), main = "TNF vs. no TNF(raw)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+    dev.off()
+  }
+  #rma
+  if(length(colnames(data))<=6){
+    png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    trad.scatter.plot(log(rowMeans(data.rmaexp[,1:3])),log(rowMeans(data.rmaexp[,4:6])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+    dev.off()
+  }
+  else{
+    png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    trad.scatter.plot(log(rowMeans(data.rmaexp[,1:4])),log(rowMeans(data.rmaexp[,5:7])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+    dev.off()
+  }
+  setwd("..")
+}
+
+
 #######
 # PCA #
 #######
@@ -474,8 +510,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     #detectionCall(data,PNGnames,colors)
 
-    #data.rma <- writeRMA(data,dir,j)
-    #data.rmaexp <- exprs(data.rma)
+    data.rma <- writeRMA(data,dir,j)
+    data.rmaexp <- exprs(data.rma)
 
     #data.mas5 <- writeMAS5(data,dir,j,scale)
     #data.mas5exp <- exprs(data.mas5)
@@ -501,7 +537,9 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     #geneOverAll(data,data.rmaexp)
 
-    RNADegrad(data)
+    #RNADegrad(data)
+  
+    chipScatter(data,data.rmaexp)
 
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
