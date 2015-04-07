@@ -80,17 +80,26 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
   setwd("histograms")
   for(i in 1:length(CELnames)){
     # raw
+    dir.create("raw", showWarnings =FALSE)
+    setwd("raw") 
     png(filename= gsub('.{3}$', '_raw.png', PNGnames[i]))
     hist(log(intensity(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
     dev.off()
+    setwd("..")
     # mas5
+    dir.create("mas5", showWarnings =FALSE)
+    setwd("mas5") 
     png(filename= gsub('.{3}$', '_mas5.png', PNGnames[i]))
     hist(log(data.mas5exp[,i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,2000), xlim = c(0,25))
     dev.off()
+    setwd("..")
     # rma
+    dir.create("rma", showWarnings =FALSE)
+    setwd("rma") 
     png(filename= gsub('.{3}$', '_rma.png', PNGnames[i]))
     hist(log(data.rmaexp[, i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,1000), xlim = c(0,5))
     dev.off()
+    setwd("..")
   }
   setwd("..")
 }
