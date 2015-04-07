@@ -344,6 +344,21 @@ correlplot <- function(data,data.mas5){
 }
 
 
+###################
+# RNA Degradation #
+###################
+RNADegrad <- function(data){
+  print("RNA_Degradation")
+  dir.create("RNA_Degradation", showWarnings = FALSE)
+  setwd("RNA_Degradation")  
+  data.rnadeg <- RNADegradation(data)
+    png(filename = "RNA_Degradation.png")
+    plotDx(data.rnadeg,main= "RNA-Degradation-Plot")
+    dev.off()
+  setwd("..")
+}
+
+
 ###########################
 # one gene over all chips #
 ###########################
@@ -400,7 +415,9 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   #biocLite("affyQCReport")
   #biocLite("panp")
   #biocLite("scatterplot3d")
-
+  #biocLite("AffyRNADegradation")
+  
+  
   ##################
   # Laden von affy #
   ##################
@@ -411,7 +428,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   library("panp")
   library("gcrma")
   library("simpleaffy")
-  library("scatterplot3d")      
+  library("scatterplot3d") 
+  library("AffyRNADegradation")
 
 
 
@@ -465,7 +483,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     #histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
 
-    chipImages(data,PNGnames,resolution)
+    #chipImages(data,PNGnames,resolution)
 
     #chipBoxplot(data,data.mas5exp,data.rmaexp)
 
@@ -483,7 +501,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     #geneOverAll(data,data.rmaexp)
 
-  
+    RNADegrad(data)
 
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
