@@ -170,7 +170,7 @@ chipImages <- function(data,PNGnames,resolution){
     dir.create("resids", showWarnings =FALSE)
     setwd("resids") 
     png(filename=gsub('.{3}$', '_resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
-    image(data.Pset,which=2, type="resids")
+    image(data.Pset,which=i, type="resids")
     dev.off()
     setwd("..")
     
@@ -178,7 +178,7 @@ chipImages <- function(data,PNGnames,resolution){
     dir.create("posResids", showWarnings =FALSE)
     setwd("posResids") 
     png(filename=gsub('.{3}$', '_pos.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
-    image(data.Pset,which=2, type="pos.resids",col=pseudoPalette(low="yellow",high="darkblue"))
+    image(data.Pset,which=i, type="pos.resids",col=pseudoPalette(low="yellow",high="darkblue"))
     dev.off()
     setwd("..")
     
@@ -186,7 +186,7 @@ chipImages <- function(data,PNGnames,resolution){
     dir.create("negResids", showWarnings =FALSE)
     setwd("negResids") 
     png(filename=gsub('.{3}$', '_neg.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
-    image(data.Pset,which=2, type="neg.resids")
+    image(data.Pset,which=i, type="neg.resids")
     dev.off()
     setwd("..")
     
@@ -194,7 +194,7 @@ chipImages <- function(data,PNGnames,resolution){
     dir.create("signResids", showWarnings =FALSE)
     setwd("signResids") 
     png(filename=gsub('.{3}$', '_sign.resids.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
-    image(data.Pset,which=2, type="sign.resids")
+    image(data.Pset,which=i, type="sign.resids")
     dev.off()
     setwd("..")
     
@@ -202,7 +202,7 @@ chipImages <- function(data,PNGnames,resolution){
     dir.create("weight", showWarnings =FALSE)
     setwd("weight") 
     png(filename=gsub('.{3}$', '_weight.png', PNGnames[i]), width = resolution, height = resolution, units = "px")
-    image(data.Pset,which=2, type="weight")
+    image(data.Pset,which=i, type="weight")
     dev.off()
     setwd("..")
     
