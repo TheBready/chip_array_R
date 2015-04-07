@@ -5,9 +5,9 @@
 #             Gruppe 2               #
 ######################################
 
-##############
-# Funktionen #
-##############
+##################
+# Sub-Funktionen #
+##################
 
 ##############
 # Write Info #
@@ -289,111 +289,113 @@ geneOverAll <- function(data,data.rmaexp,data.mas5exp){
 #   }
 
 
-
-
-
 ###################################################################################################
 #*************************************************************************************************#
 ###################################################################################################
 
-######################################
-# Installieren der benötigten Pakete #
-######################################
-#source("http://bioconductor.org/biocLite.R")
-#biocLite("affy")
-#biocLite("affyPLM")
-#biocLite("hgu133plus2.db") # Chip-Datenbank
-#biocLite("affyQCReport")
-#biocLite("panp")
-#biocLite("scatterplot3d")
 
-##################
-# Laden von affy #
-##################
-library("affy")
-library("hgu133plus2.db")
-library("affyPLM")
-library("affyQCReport")
-library("panp")
-library("gcrma")
-library("simpleaffy")
-library("scatterplot3d")      
+#################
+# Main-Funktion #
+#################
+mainAnalyse<- function(resolution = 7500,scale = 500){
 
+  ######################################
+  # Installieren der benötigten Pakete #
+  ######################################
+  #source("http://bioconductor.org/biocLite.R")
+  #biocLite("affy")
+  #biocLite("affyPLM")
+  #biocLite("hgu133plus2.db") # Chip-Datenbank
+  #biocLite("affyQCReport")
+  #biocLite("panp")
+  #biocLite("scatterplot3d")
 
-
-#########################
-# Einstellen des Pfades #
-#########################
-setwd("../input")
-dir <- dir()
-setwd("..")
+  ##################
+  # Laden von affy #
+  ##################
+  library("affy")
+  library("hgu133plus2.db")
+  library("affyPLM")
+  library("affyQCReport")
+  library("panp")
+  library("gcrma")
+  library("simpleaffy")
+  library("scatterplot3d")      
 
 
-#####################
-# globale Variablen #
-#####################
-resolution = 7500                         # Auflösung der Bilder nxn
-scale = 500                               # Scale für MAS5
-data.proGen <- toTable(hgu133plus2SYMBOL) # erstelle Liste mit allen Probe ids und Gen ids
 
-
-# For-Schleife um alle Experimente im Input Ordner ab zu arbeiten
-for(j in 1:length(dir)){
-  print(paste("Bearbeite Experiment:", dir[j], sep=" "))
-  
-# Laden der .cel Files als Batch (alle in einem Ordner)
-  setwd("input")
-  print("Laden der Daten")
-  data <- ReadAffy(celfile.path=dir[j],verbose = TRUE)
+  #########################
+  # Einstellen des Pfades #
+  #########################
+  setwd("../input")
+  dir <- dir()
   setwd("..")
 
-# Namen der verschiedenen Samples
-  CELnames <- colnames(data)                  # pure CEL-Datei Namen
-  PNGnames <- gsub('.{3}$', 'png', CELnames)  # Namen für Bilder
-  colors <- rainbow(length(CELnames))         # Farben für Plots
 
-# Erstellen des Output Ordners
-  print("Erstellen der Output-Odners")
-  dir.create("output", showWarnings =FALSE)
-  setwd("output")
-  dir.create(dir[j], showWarnings =FALSE)
-  setwd(dir[j])
+  ##################### 
+  # globale Variablen #
+  #####################                              
+  data.proGen <- toTable(hgu133plus2SYMBOL) # erstelle Liste mit allen Probe ids und Gen ids
 
-# Aufrufen der Funktionen
-  writeInfo(data)
 
-  detectionCall(data,PNGnames,colors)
-
-  data.rma <- writeRMA(data,dir,j)
-  data.rmaexp <- exprs(data.rma)
-
-  data.mas5 <- writeMAS5(data,dir,j,scale)
-  data.mas5exp <- exprs(data.mas5)
-  data.mas5calls <- mas5calls(data)
-
-  histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
-
-  chipImages(data,PNGnames,resolution)
-
-  chipBoxplot(data)
-
-  rawdata(data,dir,j)
-
-  pmdata(data,dir,j)
-
-  mmdata(data,dir,j)
-
-  chipDensity(data,CELnames)
-
-  chipCluster(data.exp,data.rmaexp,data.mas5exp)
+  # For-Schleife um alle Experimente im Input Ordner ab zu arbeiten
+  for(j in 1:length(dir)){
+    print(paste("Bearbeite Experiment:", dir[j], sep=" "))
   
-  correlplot(data,data.mas5)
+  # Laden der .cel Files als Batch (alle in einem Ordner)
+    setwd("input")
+    print("Laden der Daten")
+    data <- ReadAffy(celfile.path=dir[j],verbose = TRUE)
+    setwd("..")
 
-  geneOverAll(data,data.rmaexp)
+  # Namen der verschiedenen Samples
+    CELnames <- colnames(data)                  # pure CEL-Datei Namen
+    PNGnames <- gsub('.{3}$', 'png', CELnames)  # Namen für Bilder
+    colors <- rainbow(length(CELnames))         # Farben für Plots
+
+  # Erstellen des Output Ordners
+    print("Erstellen der Output-Odners")
+    dir.create("output", showWarnings =FALSE)
+    setwd("output")
+    dir.create(dir[j], showWarnings =FALSE)
+    setwd(dir[j])
+
+  # Aufrufen der Funktionen
+    #writeInfo(data)
+
+    #detectionCall(data,PNGnames,colors)
+
+    data.rma <- writeRMA(data,dir,j)
+    data.rmaexp <- exprs(data.rma)
+
+    data.mas5 <- writeMAS5(data,dir,j,scale)
+    data.mas5exp <- exprs(data.mas5)
+    #data.mas5calls <- mas5calls(data)
+
+    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+
+    #chipImages(data,PNGnames,resolution)
+
+    #chipBoxplot(data)
+
+    #rawdata(data,dir,j)
+
+    #pmdata(data,dir,j)
+
+    #mmdata(data,dir,j)
+
+    #chipDensity(data,CELnames)
+
+    #chipCluster(data.exp,data.rmaexp,data.mas5exp)
+  
+    #correlplot(data,data.mas5)
+
+    #geneOverAll(data,data.rmaexp)
 
   
 
-# Ende eines Experiment -> Verlasse Ordner
-  print("Bearbeiten des Experimentes beendet")
-  setwd("../..")
+  # Ende eines Experiment -> Verlasse Ordner
+    print("Bearbeiten des Experimentes beendet")
+    setwd("../..")
+  }
 }
