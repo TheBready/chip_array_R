@@ -5,27 +5,6 @@
 #             Gruppe 2               #
 ######################################
 
-######################################
-# Installieren der benötigten Pakete #
-######################################
-#source("http://bioconductor.org/biocLite.R")
-#biocLite("affy")
-#biocLite("affyPLM")
-#biocLite("hgu133plus2.db") # Chip-Datenbank
-#biocLite("affyQCReport")
-#biocLite("panp")
-
-
-##################
-# Laden von affy #
-##################
-library("affy")
-library("hgu133plus2.db")
-library("affyPLM")
-library("affyQCReport")
-library("panp")
-library("gcrma"")
-
 ##############
 # Funktionen #
 ##############
@@ -124,6 +103,7 @@ chipImages <- function(data,PNGnames,resolution){
   dir.create("images", showWarnings =FALSE)
   setwd("images")
   for(i in 1:length(PNGnames)){
+    print(PNGnames[i])
     png(filename=PNGnames[i], width = resolution, height = resolution, units = "px")
     image(data[,i])
     dev.off()  
@@ -224,7 +204,7 @@ chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
   print("Erstelle hieraisches Clustering")
   dir.create("hiera_clust", showWarnings =FALSE)
   setwd("hiera_clust") 
-  data.dist = as.matrix(t(data.exp))
+  data.dist = as.matrix(t(exprs(data)))
   data.dist = dist(data.dist,method="euclidean")
   data.cluster = hclust(data.dist, method="average" )
   png(filename="hc_raw.png")
@@ -287,9 +267,49 @@ geneOverAll <- function(data,data.rmaexp,data.mas5exp){
 }
 
 
+#######
+# PCA #
+#######
+# chipPCA <- function(data){
+#   PCA<-prcomp(exprs(data))
+#   summary(PCA)                  # Prints variance summary for all principal components.
+#   scatterplot3d(PCA$x[,1:3])
+#   scatterplot3d(PCA$x[,2:4])
+#   scatterplot3d(PCA$x[,3:5])
+#   scatterplot3d(PCA$x[,4:6])
+#   }
+
+
+
+
+
 ###################################################################################################
 #*************************************************************************************************#
 ###################################################################################################
+
+######################################
+# Installieren der benötigten Pakete #
+######################################
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("affy")
+#biocLite("affyPLM")
+#biocLite("hgu133plus2.db") # Chip-Datenbank
+#biocLite("affyQCReport")
+#biocLite("panp")
+#biocLite("scatterplot3d")
+
+##################
+# Laden von affy #
+##################
+library("affy")
+library("hgu133plus2.db")
+library("affyPLM")
+library("affyQCReport")
+library("panp")
+library("gcrma")
+library("simpleaffy")
+library("scatterplot3d")      
+
 
 
 #########################
@@ -356,7 +376,7 @@ for(j in 1:length(dir)){
 
   chipDensity(data,CELnames)
 
- # chipCluster(data.exp,data.rmaexp,data.mas5exp)
+  chipCluster(data.exp,data.rmaexp,data.mas5exp)
   
   correlplot(data,data.mas5)
 
