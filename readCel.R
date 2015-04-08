@@ -1,9 +1,9 @@
-######################################
-#       Einlesen von  .CEL-Dateien   #
-#               von                  #
-#     Nadine, Felix und Philipp      #
-#             Gruppe 2               #
-######################################
+#########################################
+# Einlesen und Analyse von .CEL-Dateien #
+#                 von                   #
+#       Nadine, Felix und Philipp       #
+#               Gruppe 2                #
+#########################################
 
 ##################
 # Sub-Funktionen #
@@ -28,7 +28,7 @@ writeInfo <- function(data){
 ##################
 # Detection Call #
 ##################
-detectionCall <- function(data,PNGnames,colors){
+detectionCall <- function(data,PNGnames,colors,CELnames){
   print("Detection Call")
   dir.create("detection_call", showWarnings =FALSE)
   setwd("detection_call")
@@ -259,7 +259,8 @@ rawdata <- function(data,dir,j){
 ##############################################
 # Ausgabe der perfect match Rohdaten in .txt #
 ##############################################
-pmdata <- function(data,dir,j){
+pmdata <- function(data,dir,j,data.proGen){
+  print("Export perfect match Daten")
   dir.create("pm", showWarnings =FALSE)
   setwd("pm")
   data.pm <- pm(data,data.proGen[,1])
@@ -270,7 +271,8 @@ pmdata <- function(data,dir,j){
 #########################################
 # Ausgabe der mismatch Rohdaten in .txt #
 #########################################
-mmdata <- function(data,dir,j){
+mmdata <- function(data,dir,j,data.proGen){
+  print("Export mismatch Daten")
   dir.create("mm", showWarnings =FALSE)
   setwd("mm")
   data.mm <- mm(data,data.proGen[,1])
@@ -282,7 +284,7 @@ mmdata <- function(data,dir,j){
 ###########
 # Density #
 ###########
-chipDensity <- function(data,CELnames){
+chipDensity <- function(data,CELnames,j,dir){
   print("Plot Density")
   dir.create("density_plot", showWarnings =FALSE)
   setwd("density_plot") 
@@ -296,10 +298,10 @@ chipDensity <- function(data,CELnames){
 ##############
 # Clustering #
 ##############
-chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
+chipCluster <- function(data,data.rmaexp,data.mas5exp){
   
   # raw data
-  print("Erstelle hieraisches Clustering")
+  print("Erstelle hieraisches Clustering - raw data")
   dir.create("hiera_clust", showWarnings =FALSE)
   setwd("hiera_clust") 
   data.dist = as.matrix(t(exprs(data)))
@@ -310,6 +312,7 @@ chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
   dev.off()
   
   # RMA data
+  print("Erstelle hieraisches Clustering - RMA data")
   data.dist = as.matrix(t(data.rmaexp))
   data.dist = dist(data.dist,method="euclidean")
   data.cluster = hclust(data.dist, method="average" )
@@ -318,6 +321,7 @@ chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
   dev.off()
   
   # MaAS data
+  print("Erstelle hieraisches Clustering - MAS 5.0 data")
   data.dist = as.matrix(t(data.mas5exp))
   data.dist = dist(data.dist,method="euclidean")
   data.cluster = hclust(data.dist, method="average" )
@@ -331,6 +335,7 @@ chipCluster <- function(data.exp,data.rmaexp,data.mas5exp){
 # Correlation plot #
 ####################
 correlplot <- function(data,data.mas5){
+  print("Correlation plot")
   dir.create("correlation_plot", showWarnings = FALSE)
   setwd("correlation_plot")  
   QCReport(data)
@@ -353,7 +358,7 @@ RNADegrad <- function(data){
   setwd("RNA_Degradation")  
   data.rnadeg <- RNADegradation(data)
     png(filename = "RNA_Degradation.png")
-    plotDx(data.rnadeg,main= "RNA-Degradation-Plot")
+    plotDx(data.rnadeg)
     dev.off()
   setwd("..")
 }
@@ -375,8 +380,8 @@ geneOverAll <- function(data,data.rmaexp,data.mas5exp){
   dev.off()
   data.ps <- probeset(data, genenames="1553602_at")
   data.psmean <- colMeans(pm(data.ps[[1]]))
-  png(filename = "one_gene_plot_mas5.png")
-  plot(data.psmean,type ="l", main = "Ein Gen über alle Chips - MAS 5.0",ylab = "Intesität", xlab= "Micro-Chip")
+  png(filename = "one_gene_plot_raw_mean.png")
+  plot(data.psmean,type ="l", main = "Ein Gen über alle Chips - raw mean",ylab = "Intesität", xlab= "Micro-Chip")
   dev.off()
   setwd("..")
 }
@@ -506,38 +511,38 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     setwd(dir[j])
 
   # Aufrufen der Funktionen
-    #writeInfo(data)
+    writeInfo(data)
 
-    #detectionCall(data,PNGnames,colors)
+    detectionCall(data,PNGnames,colors,CELnames)
 
     data.rma <- writeRMA(data,dir,j)
     data.rmaexp <- exprs(data.rma)
 
-    #data.mas5 <- writeMAS5(data,dir,j,scale)
-    #data.mas5exp <- exprs(data.mas5)
-    #data.mas5calls <- mas5calls(data)
+    data.mas5 <- writeMAS5(data,dir,j,scale)
+    data.mas5exp <- exprs(data.mas5)
+    data.mas5calls <- mas5calls(data)
 
-    #histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
 
-    #chipImages(data,PNGnames,resolution)
+    chipImages(data,PNGnames,resolution)
 
-    #chipBoxplot(data,data.mas5exp,data.rmaexp)
+    chipBoxplot(data,data.mas5exp,data.rmaexp)
 
-    #rawdata(data,dir,j)
+    rawdata(data,dir,j)
 
-    #pmdata(data,dir,j)
+    pmdata(data,dir,j,data.proGen)
 
-    #mmdata(data,dir,j)
+    mmdata(data,dir,j,data.proGen)
 
-    #chipDensity(data,CELnames)
+    chipDensity(data,CELnames,j,dir)
 
-    #chipCluster(data.exp,data.rmaexp,data.mas5exp)
+    chipCluster(data,data.rmaexp,data.mas5exp)
   
-    #correlplot(data,data.mas5)
+    correlplot(data,data.mas5)
 
-    #geneOverAll(data,data.rmaexp)
+    geneOverAll(data,data.rmaexp,data.mas5exp)
 
-    #RNADegrad(data)
+    RNADegrad(data)
   
     chipScatter(data,data.rmaexp)
 
