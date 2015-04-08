@@ -390,14 +390,17 @@ geneOverAll <- function(data,data.rmaexp,data.mas5exp){
 ###############
 # Scatterplot #
 ###############
-chipScatter <- function(data,data.rmaexp){
+chipScatter <- function(data,data.rmaexp,data.mas5exp){
   print("Scatterplot")
   dir.create("scatterplot", showWarnings = FALSE)
   setwd("scatterplot") 
   png(filename = "scatterplot-test.png",width = 1024, height = 1024, units = "px", pointsize = 18)
   trad.scatter.plot(log(rowMeans(exprs(data)[,1:3])),log(rowMeans(exprs(data)[,1:3])), main = "TNF vs. no TNF", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
   dev.off()
+
   #raw
+  dir.create("raw", showWarnings = FALSE)
+  setwd("raw") 
   if(length(colnames(data))<=6){
     png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
     trad.scatter.plot(log(rowMeans(exprs(data)[,1:3])),log(rowMeans(exprs(data)[,4:6])), main = "TNF vs. no TNF(raw)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
@@ -408,7 +411,11 @@ chipScatter <- function(data,data.rmaexp){
     trad.scatter.plot(log(rowMeans(exprs(data)[,1:4])),log(rowMeans(exprs(data)[,5:7])), main = "TNF vs. no TNF(raw)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
     dev.off()
   }
+  setwd("..")
+  
   #rma
+  dir.create("rma", showWarnings = FALSE)
+  setwd("rma") 
   if(length(colnames(data))<=6){
     png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
     trad.scatter.plot(log(rowMeans(data.rmaexp[,1:3])),log(rowMeans(data.rmaexp[,4:6])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
@@ -419,6 +426,22 @@ chipScatter <- function(data,data.rmaexp){
     trad.scatter.plot(log(rowMeans(data.rmaexp[,1:4])),log(rowMeans(data.rmaexp[,5:7])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
     dev.off()
   }
+  setwd("..")
+  
+  #mas5
+  dir.create("mas5", showWarnings = FALSE)
+  setwd("mas5") 
+  if(length(colnames(data))<=6){
+    png(filename = "scatterplot_mas5.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    trad.scatter.plot(log(rowMeans(data.mas5exp[,1:3])),log(rowMeans(data.mas5exp[,4:6])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+    dev.off()
+  }
+  else{
+    png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    trad.scatter.plot(log(rowMeans(data.mas5exp[,1:4])),log(rowMeans(data.mas5exp[,5:7])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
+    dev.off()
+  }
+  setwd("..")
   setwd("..")
 }
 
@@ -435,6 +458,51 @@ qc_stats_plot<-function(data){
   dev.off()
   setwd("..")
 }
+
+
+#############
+# MVA-Plots #
+#############
+mvaPlot<-function(data,data.rmaexp,data.mas5exp){
+  print("MVA")
+  dir.create("MVA", showWarnings = FALSE)
+  setwd("MVA") 
+  
+  #raw
+  dir.create("raw", showWarnings = FALSE)
+  setwd("raw") 
+  png(filename = "mva-plot_raw.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  mva.pairs(exprs(data), log.it = FALSE)
+  dev.off()
+  png(filename = "mva-plot_log_raw.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  mva.pairs(exprs(data), log.it = TRUE)
+  dev.off()
+  setwd("..")
+  
+  #rma
+  dir.create("rma", showWarnings = FALSE)
+  setwd("rma") 
+  png(filename = "mva-plot_rma.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  mva.pairs(data.rmaexp, log.it = FALSE)
+  dev.off()
+  png(filename = "mva-plot_log_rma.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  mva.pairs(data.rmaexp, log.it = TRUE)
+  dev.off()
+  setwd("..")
+  
+  #mas5
+  dir.create("mas5", showWarnings = FALSE)
+  setwd("mas5") 
+  png(filename = "mva-plot_mas5.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  mva.pairs(data.rmaexp, log.it = FALSE)
+  dev.off()
+  png(filename = "mva-plot_log_mas5.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  mva.pairs(data.mas5exp, log.it = TRUE)
+  dev.off()
+  setwd("..")
+  setwd("..")
+}
+
 
 #######
 # PCA #
@@ -557,9 +625,12 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     RNADegrad(data)
   
-    chipScatter(data,data.rmaexp)
+    chipScatter(data,data.rmaexp,data.mas5exp)
   
     qc_stats_plot(data)
+ 
+    mvaPlot(data,data.rmaexp,data.mas5exp)
+    
 
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
