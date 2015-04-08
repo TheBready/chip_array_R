@@ -415,7 +415,7 @@ chipScatter <- function(data,data.rmaexp){
     dev.off()
   }
   else{
-    png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
+    png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
     trad.scatter.plot(log(rowMeans(data.rmaexp[,1:4])),log(rowMeans(data.rmaexp[,5:7])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
     dev.off()
   }
@@ -459,9 +459,9 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   #biocLite("AffyRNADegradation")
   
   
-  ##################
-  # Laden von affy #
-  ##################
+  #####################
+  # Laden von Paketen #
+  #####################
   library("affy")
   library("hgu133plus2.db")
   library("affyPLM")
