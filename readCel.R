@@ -507,14 +507,27 @@ mvaPlot<-function(data,data.rmaexp,data.mas5exp){
 #######
 # PCA #
 #######
-# chipPCA <- function(data){
-#   PCA<-prcomp(exprs(data))
-#   summary(PCA)                  # Prints variance summary for all principal components.
-#   scatterplot3d(PCA$x[,1:3])
-#   scatterplot3d(PCA$x[,2:4])
-#   scatterplot3d(PCA$x[,3:5])
-#   scatterplot3d(PCA$x[,4:6])
-#   }
+chipPCA <- function(data,CELnames){
+  print("PCA")
+  dir.create("PCA", showWarnings = FALSE)
+  setwd("PCA")
+  
+  PCA<-prcomp(t(exprs(data)))
+  # Übersicht Hauptkomponenten
+  png(filename = "PCA.png")
+  plot(PCA,main = "Hauptkomponentenanalyse - erklärende Varianz" )
+  dev.off()
+  
+  # Plot 1. und 2. Hauptkomponente
+  png(filename = "PCA2.png")
+  plot(PCA$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse")
+  grid()
+  legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
+  dev.off()
+  
+  setwd("..")
+}
+
 
 
 ###################################################################################################
@@ -592,44 +605,47 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     setwd(dir[j])
 
   # Aufrufen der Funktionen
-    writeInfo(data)
-
-    detectionCall(data,PNGnames,colors,CELnames)
-
-    data.rma <- writeRMA(data,dir,j)
-    data.rmaexp <- exprs(data.rma)
-
-    data.mas5 <- writeMAS5(data,dir,j,scale)
-    data.mas5exp <- exprs(data.mas5)
-    data.mas5calls <- mas5calls(data)
-
-    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
-
-    chipImages(data,PNGnames,resolution)
-
-    chipBoxplot(data,data.mas5exp,data.rmaexp)
-
-    rawdata(data,dir,j)
-
-    pmdata(data,dir,j,data.proGen)
-
-    mmdata(data,dir,j,data.proGen)
-
-    chipDensity(data,CELnames,j,dir)
-
-    chipCluster(data,data.rmaexp,data.mas5exp)
+#     writeInfo(data)
+# 
+#     detectionCall(data,PNGnames,colors,CELnames)
+# 
+#     data.rma <- writeRMA(data,dir,j)
+#     data.rmaexp <- exprs(data.rma)
+# 
+#     data.mas5 <- writeMAS5(data,dir,j,scale)
+#     data.mas5exp <- exprs(data.mas5)
+#     data.mas5calls <- mas5calls(data)
+# 
+#     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+# 
+#     chipImages(data,PNGnames,resolution)
+# 
+#     chipBoxplot(data,data.mas5exp,data.rmaexp)
+# 
+#     rawdata(data,dir,j)
+# 
+#     pmdata(data,dir,j,data.proGen)
+# 
+#     mmdata(data,dir,j,data.proGen)
+# 
+#     chipDensity(data,CELnames,j,dir)
+# 
+#     chipCluster(data,data.rmaexp,data.mas5exp)
+#   
+#     correlplot(data,data.mas5)
+# 
+#     geneOverAll(data,data.rmaexp,data.mas5exp)
+# 
+#     RNADegrad(data)
+#   
+#     chipScatter(data,data.rmaexp,data.mas5exp)
+#   
+#     qc_stats_plot(data)
+#  
+#     mvaPlot(data,data.rmaexp,data.mas5exp)
   
-    correlplot(data,data.mas5)
-
-    geneOverAll(data,data.rmaexp,data.mas5exp)
-
-    RNADegrad(data)
-  
-    chipScatter(data,data.rmaexp,data.mas5exp)
-  
-    qc_stats_plot(data)
- 
-    mvaPlot(data,data.rmaexp,data.mas5exp)
+      chipPCA(data,CELnames)
+    
     
 
   # Ende eines Experiment -> Verlasse Ordner
