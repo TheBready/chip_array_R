@@ -422,6 +422,19 @@ chipScatter <- function(data,data.rmaexp){
   setwd("..")
 }
 
+############
+# QC-stats #
+############
+qc_stats_plot<-function(data){
+  print("QC Stats")
+  dir.create("QC Stats", showWarnings = FALSE)
+  setwd("QC Stats") 
+  qc_stats<-qc(data)
+  png(filename = "QC_Stats-test.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  plot(qc_stats)
+  dev.off()
+  setwd("..")
+}
 
 #######
 # PCA #
@@ -545,6 +558,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     RNADegrad(data)
   
     chipScatter(data,data.rmaexp)
+  
+    qc_stats_plot(data)
 
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
