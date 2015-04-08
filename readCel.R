@@ -513,10 +513,12 @@ chipPCA <- function(data,CELnames){
   setwd("PCA")
   
   PCA<-prcomp(t(exprs(data)))
+  PCA_Scale<-prcomp(t(exprs(data)), scale=TRUE)
   # Übersicht Hauptkomponenten
   png(filename = "PCA.png")
   plot(PCA,main = "Hauptkomponentenanalyse - erklärende Varianz" )
   dev.off()
+  
   
   # Plot 1. und 2. Hauptkomponente
   png(filename = "PCA2.png")
@@ -524,7 +526,11 @@ chipPCA <- function(data,CELnames){
   grid()
   legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
   dev.off()
-  
+  png(filename = "PCA_Scale.png")
+  plot(PCA_Scale$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse")
+  grid()
+  legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
+  dev.off()
   setwd("..")
 }
 
