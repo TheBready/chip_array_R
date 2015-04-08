@@ -71,6 +71,8 @@ writeMAS5 <- function(data,dir,j=1,scale=500){
   return(data.mas5)
 }
 
+
+
 ############################
 # Erstellen der Histogramme #
 ############################
@@ -422,6 +424,21 @@ chipScatter <- function(data,data.rmaexp){
   setwd("..")
 }
 
+############
+# QC-stats #
+############
+qc_stats_plot<-function(data){
+  print("QC Stats")
+  dir.create("QC Stats", showWarnings = FALSE)
+  setwd("QC Stats") 
+  qc_stats<-qc(data)
+  png(filename = "QC_Stats-test.png",width = 1920, height = 1080, units = "px", pointsize = 24)
+  plot(qc_stats)
+  dev.off()
+  setwd("..")
+}
+
+
 
 #######
 # PCA #
@@ -450,6 +467,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   # Installieren der benötigten Pakete #
   ######################################
   #source("http://bioconductor.org/biocLite.R")
+  #biocLite("Biobase")
   #biocLite("affy")
   #biocLite("affyPLM")
   #biocLite("hgu133plus2.db") # Chip-Datenbank
@@ -457,11 +475,13 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   #biocLite("panp")
   #biocLite("scatterplot3d")
   #biocLite("AffyRNADegradation")
+  #biocLite("simpleaffy")
   
   
   ##################
   # Laden von affy #
   ##################
+  library("Biobase")
   library("affy")
   library("hgu133plus2.db")
   library("affyPLM")
@@ -545,6 +565,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     RNADegrad(data)
   
     chipScatter(data,data.rmaexp)
+    
+    qc_stats_plot(data)
 
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
