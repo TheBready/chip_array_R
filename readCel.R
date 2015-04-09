@@ -12,7 +12,6 @@
 ######################################
 # Installieren der benötigten Pakete #
 ######################################
-
 installPackages <- function(){
   #package source location
   source("http://bioconductor.org/biocLite.R")
@@ -96,6 +95,7 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
   print("Histogramme")
   dir.create("histograms", showWarnings =FALSE)
   setwd("histograms")
+  #Einzel-Histogramme
   for(i in 1:length(CELnames)){
     
     # raw
@@ -110,15 +110,16 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
     dir.create("pm_raw", showWarnings =FALSE)
     setwd("pm_raw") 
     png(filename= gsub('.{3}$', '_pm_raw.png', PNGnames[i]))
-    hist(log(pm(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
+    hist(log(pm(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,40000), xlim = c(3,9))
     dev.off()
     setwd("..")
+    
     
     # mm_raw
     dir.create("mm_raw", showWarnings =FALSE)
     setwd("mm_raw") 
     png(filename= gsub('.{3}$', '_mm_raw.png', PNGnames[i]))
-    hist(log(mm(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,150000), xlim = c(3,10))
+    hist(log(mm(data[, i])), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,70000), xlim = c(3,8))
     dev.off()
     setwd("..")
     
@@ -126,7 +127,7 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
     dir.create("mas5", showWarnings =FALSE)
     setwd("mas5") 
     png(filename= gsub('.{3}$', '_mas5.png', PNGnames[i]))
-    hist(log(data.mas5exp[,i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,2000), xlim = c(0,25))
+    hist(log(data.mas5exp[,i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)")
     dev.off()
     setwd("..")
     
@@ -134,10 +135,99 @@ histogramms <- function(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp){
     dir.create("rma", showWarnings =FALSE)
     setwd("rma") 
     png(filename= gsub('.{3}$', '_rma.png', PNGnames[i]))
-    hist(log(data.rmaexp[, i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,1000), xlim = c(0,5))
-    dev.off()
+    hist(log(data.rmaexp[, i]), breaks = 100,border = F, col=colors[i], main=CELnames[i],ylab="Anzahl",xlab="Intensität(log)")
+    dev.off()   
     setwd("..")
+    
+    
   }
+  
+  # Vergleich-Histogramme
+  # raw
+  setwd("raw") 
+  png(filename= "Histogram-Vergleich-raw.png")
+  histogramList <- vector('list', 6)
+  histogramList[1] <- hist(log(intensity(data[, 1])), breaks = 100)  
+  for(m in 2:length(CELnames)){
+    histogramList[[m]] <- hist(log(intensity(data[, m])), breaks = 100)
+  }
+  plot(histogramList[[m]] ,border = F, col=colors[1], main="Histogramme der DNA-Arrays - raw",ylab="Anzahl",xlab="Intensität(log)",ylim=c(0,140000))   
+  for(m in 2:length(CELnames)){
+    plot( histogramList[[m]],col=colors[m], add=T,border = F)
+  }
+  legend('topright',colnames(data),fill = colors, bty = 'n',border = NA)
+  dev.off()
+  
+  setwd("..")
+  
+  # pm raw
+  setwd("pm_raw") 
+  png(filename= "Histogram-Vergleich-pm_raw.png")
+  histogramList <- vector('list', 6)
+  histogramList[1] <- hist(log(pm(data[, 1])), breaks = 100)  
+  for(m in 2:length(CELnames)){
+    histogramList[[m]] <- hist(log(pm(data[, m])), breaks = 100)
+  }
+  plot(histogramList[[m]] ,border = F, col=colors[1], main="Histogramme der DNA-Arrays - pm_raw",ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,40000), xlim = c(3,8))   
+  for(m in 2:length(CELnames)){
+    plot( histogramList[[m]],col=colors[m], add=T,border = F)
+  }
+  legend('topright',colnames(data),fill = colors, bty = 'n',border = NA)
+  dev.off()
+  
+  setwd("..")
+  
+  
+  # mm_raw
+  setwd("mm_raw") 
+  png(filename= "Histogram-Vergleich-mm_raw.png")
+  histogramList <- vector('list', 6)
+  histogramList[1] <- hist(log(mm(data[, 1])), breaks = 100)  
+  for(m in 2:length(CELnames)){
+    histogramList[[m]] <- hist(log(mm(data[, m])), breaks = 100)
+  }
+  plot(histogramList[[m]] ,border = F, col=colors[1], main="Histogramme der DNA-Arrays - mm_raw",ylab="Anzahl",xlab="Intensität(log)", ylim = c(0,70000), xlim = c(3,8))   
+  for(m in 2:length(CELnames)){
+    plot( histogramList[[m]],col=colors[m], add=T,border = F)
+  }
+  legend('topright',colnames(data),fill = colors, bty = 'n',border = NA)
+  dev.off()
+  
+  setwd("..")
+  
+  # mas5
+  setwd("mas5") 
+  png(filename= "Histogram-Vergleich-MAS5.0.png")
+  histogramList <- vector('list', 6)
+  histogramList[1] <- hist(log(data.mas5exp[,1]), breaks = 100)  
+  for(m in 2:length(CELnames)){
+    histogramList[[m]] <- hist(log(data.mas5exp[,m]), breaks = 100)
+  }
+  plot(histogramList[[m]] ,border = F, col=colors[1], main="Histogramme der DNA-Arrays - MAS 5.0",ylab="Anzahl",xlab="Intensität(log)")   
+  for(m in 2:length(CELnames)){
+    plot( histogramList[[m]],col=colors[m], add=T,border = F)
+  }
+  legend('topright',colnames(data),fill = colors, bty = 'n',border = NA)
+  dev.off()
+  
+  setwd("..")
+  
+  # rma
+  setwd("rma") 
+  png(filename= "Histogram-Vergleich-RMA.png")
+  histogramList <- vector('list', 6)
+  histogramList[1] <- hist(log(data.rmaexp[, 1]), breaks = 100)  
+  for(m in 2:length(CELnames)){
+    histogramList[[m]] <- hist(log(data.rmaexp[, m]), breaks = 100)
+  }
+  plot(histogramList[[m]] ,border = F, col=colors[1], main="Histogramme der DNA-Arrays - RMA",ylab="Anzahl",xlab="Intensität(log)")   
+  for(m in 2:length(CELnames)){
+    plot( histogramList[[m]],col=colors[m], add=T,border = F)
+  }
+  legend('topright',colnames(data),fill = colors, bty = 'n',border = NA)
+  dev.off()
+  
+  setwd("..")
   setwd("..")
 }
 
@@ -710,7 +800,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   # Namen der verschiedenen Samples
     CELnames <- colnames(data)                  # pure CEL-Datei Namen
     PNGnames <- gsub('.{3}$', 'png', CELnames)  # Namen für Bilder
-    colors <- rainbow(length(CELnames))         # Farben für Plots
+    colors <- rainbow(length(CELnames), alpha =0.5)         # Farben für Plots
 
   # Erstellen des Output Ordners
     print("Erstellen der Output-Odners")
@@ -724,14 +814,14 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     detectionCall(data,PNGnames,colors,CELnames)
 # 
-#     data.rma <- writeRMA(data,dir,j)
-#     data.rmaexp <- exprs(data.rma)
+     data.rma <- writeRMA(data,dir,j)
+     data.rmaexp <- exprs(data.rma)
 # 
-#     data.mas5 <- writeMAS5(data,dir,j,scale)
-#     data.mas5exp <- exprs(data.mas5)
+     data.mas5 <- writeMAS5(data,dir,j,scale)
+     data.mas5exp <- exprs(data.mas5)
 #     data.mas5calls <- mas5calls(data)
 # 
-#     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
 # 
 #     chipImages(data,PNGnames,resolution)
 # 
@@ -751,7 +841,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     geneOverAll(data,data.rmaexp,data.mas5exp)
 # 
-      RNADegrad(data)
+#     RNADegrad(data)
 #   
 #     chipScatter(data,data.rmaexp,data.mas5exp)
 #   
