@@ -559,13 +559,14 @@ backgroundPlot <- function(data)
 ###################
 # RNA Degradation #
 ###################
-RNADegrad <- function(data){
+RNADegrad <- function(data, colors){
   print("RNA_Degradation")
   dir.create("RNA_Degradation", showWarnings = FALSE)
   setwd("RNA_Degradation")  
-  data.rnadeg <- RNADegradation(data)
+  data.rnadeg <- AffyRNAdeg(data)
   png(filename = "RNA_Degradation.png")
-  plotAffyRNAdeg(data.rnadeg)
+  plotAffyRNAdeg(data.rnadeg, cols = colors)
+  legend('topleft',colnames(data),fill = colors, bty = 'n',border = NA)
   dev.off()
   setwd("..")
 }
@@ -814,14 +815,14 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     detectionCall(data,PNGnames,colors,CELnames)
 # 
-     data.rma <- writeRMA(data,dir,j)
-     data.rmaexp <- exprs(data.rma)
+#     data.rma <- writeRMA(data,dir,j)
+#     data.rmaexp <- exprs(data.rma)
 # 
-     data.mas5 <- writeMAS5(data,dir,j,scale)
-     data.mas5exp <- exprs(data.mas5)
+#     data.mas5 <- writeMAS5(data,dir,j,scale)
+#     data.mas5exp <- exprs(data.mas5)
 #     data.mas5calls <- mas5calls(data)
 # 
-     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+#     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
 # 
 #     chipImages(data,PNGnames,resolution)
 # 
@@ -841,7 +842,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     geneOverAll(data,data.rmaexp,data.mas5exp)
 # 
-#     RNADegrad(data)
+     RNADegrad(data,colors)
 #   
 #     chipScatter(data,data.rmaexp,data.mas5exp)
 #   
