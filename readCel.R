@@ -598,56 +598,51 @@ geneOverAll <- function(data,data.rmaexp,data.mas5exp){
 ###############
 # Scatterplot #
 ###############
-chipScatter <- function(data,data.rmaexp,data.mas5exp){
+chipScatter <- function(data,data.rmaexp,data.mas5exp,CELnames){
   print("Scatterplot")
   dir.create("scatterplot", showWarnings = FALSE)
   setwd("scatterplot") 
-  png(filename = "scatterplot-test.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-  trad.scatter.plot(log(rowMeans(exprs(data)[,1:3])),log(rowMeans(exprs(data)[,1:3])), main = "TNF vs. no TNF", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-  dev.off()
-
+  names <- gsub('.{4}$', '', CELnames)
+  
   #raw
   dir.create("raw", showWarnings = FALSE)
   setwd("raw") 
-  if(length(colnames(data))<=6){
-    png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-    trad.scatter.plot(log(rowMeans(exprs(data)[,1:3])),log(rowMeans(exprs(data)[,4:6])), main = "TNF vs. no TNF(raw)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-    dev.off()
-  }
-  else{
-    png(filename = "scatterplot_raw.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-    trad.scatter.plot(log(rowMeans(exprs(data)[,1:4])),log(rowMeans(exprs(data)[,5:7])), main = "TNF vs. no TNF(raw)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-    dev.off()
+  for(i in 1:(length(names))){
+    for(j in i:length(names)){
+      name <- paste(names[i],names[j],sep = " vs ")
+      print(name)
+      png(filename = paste(name,"_raw.png",sep = ""),width = 1024, height = 1024, units = "px", pointsize = 18)
+      trad.scatter.plot(log(exprs(data)[,i]),log(exprs(data)[,j]), main = name, xlab=names[i],ylab=names[j],fc.line.col="red")
+      dev.off()
+    }
   }
   setwd("..")
   
   #rma
   dir.create("rma", showWarnings = FALSE)
   setwd("rma") 
-  if(length(colnames(data))<=6){
-    png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-    trad.scatter.plot(log(rowMeans(data.rmaexp[,1:3])),log(rowMeans(data.rmaexp[,4:6])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-    dev.off()
-  }
-  else{
-    png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-    trad.scatter.plot(log(rowMeans(data.rmaexp[,1:4])),log(rowMeans(data.rmaexp[,5:7])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-    dev.off()
+  for(i in 1:(length(names))){
+    for(j in i:length(names)){
+      name <- paste(names[i],names[j],sep = " vs ")
+      print(name)
+      png(filename = paste(name,"_rma.png",sep = ""),width = 1024, height = 1024, units = "px", pointsize = 18)
+      trad.scatter.plot(log(data.rmaexp[,i]),log(data.rmaexp[,j]), main = name, xlab=names[i],ylab=names[j],fc.line.col="red")
+      dev.off()
+    }
   }
   setwd("..")
   
   #mas5
   dir.create("mas5", showWarnings = FALSE)
   setwd("mas5") 
-  if(length(colnames(data))<=6){
-    png(filename = "scatterplot_mas5.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-    trad.scatter.plot(log(rowMeans(data.mas5exp[,1:3])),log(rowMeans(data.mas5exp[,4:6])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-    dev.off()
-  }
-  else{
-    png(filename = "scatterplot_rma.png",width = 1024, height = 1024, units = "px", pointsize = 18)
-    trad.scatter.plot(log(rowMeans(data.mas5exp[,1:4])),log(rowMeans(data.mas5exp[,5:7])), main = "TNF vs. no TNF(rma)", xlab = "log(TNF)", ylab="log(no TNF)",fc.line.col="red")
-    dev.off()
+  for(i in 1:(length(names))){
+    for(j in i:length(names)){
+      name <- paste(names[i],names[j],sep = " vs ")
+      print(name)
+      png(filename = paste(name,"_mas5.png",sep = ""),width = 1024, height = 1024, units = "px", pointsize = 18)
+      trad.scatter.plot(log(data.mas5exp[,i]),log(data.mas5exp[,j]), main = name, xlab=names[i],ylab=names[j],fc.line.col="red")
+      dev.off()
+    }
   }
   setwd("..")
   setwd("..")
@@ -712,9 +707,6 @@ mvaPlot<-function(data,data.rmaexp,data.mas5exp){
 }
 
 
-
-
-  
 #######
 # PCA #
 #######
@@ -780,8 +772,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   setwd("../input")
   dir <- dir()
   setwd("..")
-
-
+    
+  
   ##################### 
   # globale Variablen #
   #####################                              
@@ -790,36 +782,44 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
   # For-Schleife um alle Experimente im Input Ordner ab zu arbeiten
   for(j in 1:length(dir)){
+    
+  # Erstellen des Output Ordners  
+    print("Erstellen der Output-Odners")
+    dir.create("output", showWarnings =FALSE)
+    setwd("output")
+    dir.create(dir[j], showWarnings =FALSE)
+    setwd(dir[j])
+    
+    
+  # Erstellen der LogDatei 
+    dir.create("log", showWarnings =FALSE)
+    setwd("log")
+    sink("log.txt")
+    setwd("../../..")
     print(paste("Bearbeite Experiment:", dir[j], sep=" "))
   
   # Laden der .cel Files als Batch (alle in einem Ordner)
     setwd("input")
     print("Laden der Daten")
     data <- ReadAffy(celfile.path=dir[j],verbose = TRUE)
-    setwd("..")
-
+    setwd("../output")
+    setwd(dir[j])  
+  
   # Namen der verschiedenen Samples
     CELnames <- colnames(data)                  # pure CEL-Datei Namen
     PNGnames <- gsub('.{3}$', 'png', CELnames)  # Namen für Bilder
     colors <- rainbow(length(CELnames), alpha =0.5)         # Farben für Plots
-
-  # Erstellen des Output Ordners
-    print("Erstellen der Output-Odners")
-    dir.create("output", showWarnings =FALSE)
-    setwd("output")
-    dir.create(dir[j], showWarnings =FALSE)
-    setwd(dir[j])
-
+ 
   # Aufrufen der Funktionen
 #     writeInfo(data)
 # 
 #     detectionCall(data,PNGnames,colors,CELnames)
 # 
-#     data.rma <- writeRMA(data,dir,j)
-#     data.rmaexp <- exprs(data.rma)
+     data.rma <- writeRMA(data,dir,j)
+     data.rmaexp <- exprs(data.rma)
 # 
-#     data.mas5 <- writeMAS5(data,dir,j,scale)
-#     data.mas5exp <- exprs(data.mas5)
+     data.mas5 <- writeMAS5(data,dir,j,scale)
+     data.mas5exp <- exprs(data.mas5)
 #     data.mas5calls <- mas5calls(data)
 # 
 #     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
@@ -842,9 +842,9 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     geneOverAll(data,data.rmaexp,data.mas5exp)
 # 
-     RNADegrad(data,colors)
+#     RNADegrad(data,colors)
 #   
-#     chipScatter(data,data.rmaexp,data.mas5exp)
+     chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
 #   
 #     qc_stats_plot(data)
 #  
@@ -857,6 +857,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
+    sink()
     setwd("../..")
   }
 }
