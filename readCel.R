@@ -627,16 +627,6 @@ mvaPlot<-function(data,data.rmaexp,data.mas5exp){
 #######
 # PCA #
 #######
-<<<<<<< HEAD
-# chipPCA <- function(data){
-#   PCA<-prcomp(exprs(data))
-#   summary(PCA)                  # Prints variance summary for all principal components.
-#   scatterplot3d(PCA$x[,1:3])
-#   scatterplot3d(PCA$x[,2:4])
-#   scatterplot3d(PCA$x[,3:5])
-#   scatterplot3d(PCA$x[,4:6])
-#   }
-=======
 chipPCA <- function(data,CELnames){
   print("PCA")
   dir.create("PCA", showWarnings = FALSE)
@@ -663,8 +653,6 @@ chipPCA <- function(data,CELnames){
   dev.off()
   setwd("..")
 }
-
->>>>>>> origin/master
 
 
 ###################################################################################################
