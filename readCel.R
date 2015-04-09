@@ -9,6 +9,24 @@
 # Sub-Funktionen #
 ##################
 
+######################################
+# Installieren der benötigten Pakete #
+######################################
+
+installPackages <- function(){
+  #package source location
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("affy")
+  biocLite("affyPLM")
+  biocLite("hgu133plus2.db") # Chip-Datenbank
+  biocLite("affyQCReport")
+  biocLite("panp")
+  biocLite("scatterplot3d")
+  biocLite("AffyRNADegradation")
+  
+}  
+
+
 ##############
 # Write Info #
 ##############
@@ -348,6 +366,105 @@ correlplot <- function(data,data.mas5){
   setwd("..")
 }
 
+##########################
+## Background Intensity ##
+##########################
+
+backgroundPlot <- function(data)
+{
+  print("Erstelle background intensity plot")
+  dir.create("background_Intensity", showWarnings =FALSE)
+  setwd("background_Intensity") 
+  quality <- qc(data)
+  
+  chips <- colnames(exprs(data))
+  num.chips <- length(chips)
+  
+  #savepath<-paste(savepath, "Background_Intensity_Plot", "background_intensity_plot.jpg", sep="/")
+  
+  backgroundMean<-mean(quality@average.background)
+  backgroundMin <- min(quality@average.background)
+  backgroundMax <- max(quality@average.background)
+  
+  reference<-cbind(c(backgroundMean-10,backgroundMin,backgroundMax-20),c(backgroundMean+10,backgroundMin+20,backgroundMax))
+  reftext<-c("[mean-10 ; mean+10]", "[min ; min+20]", "[max-20 ; max]")
+  
+  x1 <- (quality@average.background >= (backgroundMean-10) & quality@average.background <= (backgroundMean+10))
+  x2 <- (quality@average.background >= backgroundMin & quality@average.background <= (backgroundMin+20))  
+  x3 <- (quality@average.background >= (backgroundMax-20) & quality@average.background <= backgroundMax)  
+  
+  outliers <- c(length(x1[x1==FALSE]),length(x2[x2==FALSE]), length(x3[x3==FALSE]))
+  if(outliers[1] == 0)
+  {
+    reference<- reference[1,]
+    reftext<-reftext[1]
+  }
+  else
+  {
+    reference<- reference[outliers==min(outliers),] # less outliers
+    if(length(reference) > 3) { reference<-reference[1,] }
+    reftext<- reftext[outliers==min(outliers)] # less outliers
+    if(length(reftext) > 1) { reftext<-reftext[1] }				
+  }
+  
+  testMinimum <- reference[1]
+  testMaximum <- reference[2]
+  ylimit = c(0, max(max(quality@maximum.background), testMaximum)+5)
+  
+  png(filename = "background_Intensity_plot.png",width=2000,height=2500,pointsize=40)
+  #jpeg(file = savepath,width=2000,height=2500,pointsize=40)
+  par(mfrow=c(1,2),oma=c(13,0.5,3,0.5),cex.axis=0.8)
+  
+  plot(c(quality@minimum.background, quality@maximum.background), type = 'n', ann=FALSE, axes=FALSE, frame.plot=TRUE, pch='.', cex=10)
+  par(new=TRUE)
+  plot(quality@maximum.background, type = 'h', col=c(2:num.chips+1), ann=FALSE, axes=FALSE, frame.plot=TRUE, pch='.', lwd=3, ylim = ylimit)
+  par(new=TRUE)
+  plot(quality@minimum.background, type = 'h', ann=FALSE, axes=FALSE, frame.plot=TRUE, pch='.', lwd=4, col='white', ylim = ylimit)        
+  par(new=TRUE)
+  plot(quality@maximum.background, type = 'p', ann=FALSE, axes=FALSE, frame.plot=TRUE, pch=6, cex=0.5, ylim = ylimit)
+  par(new=TRUE)
+  plot(quality@minimum.background, type = 'p', ann=FALSE, axes=FALSE, frame.plot=TRUE, pch=2, cex=0.5, ylim=ylimit)
+  par(new=TRUE)
+  plot(quality@average.background, type='p', ann=FALSE, axes=FALSE, frame.plot=TRUE, pch=3, cex=1,  ylim=ylimit)
+  abline(h=testMinimum, col="grey", ylim=ylimit, lwd=3)
+  abline(h=testMaximum, col="grey", ylim=ylimit, lwd=3)	
+  title(main="Plot of background intensity",xlab="",ylab="background intensity")
+  axis(2)
+  par(cex.axis=0.65)
+  
+  if((num.chips)<20)
+  {
+    axis(1,at=1:length(quality@average.background),las=2,labels=(substr(chips,1,nchar(chips)-4)))  
+  }
+  
+  legend("bottomright", c("max bg","average bg", "min bg"), col = c(1, 1, 1), pch = c(6,3,2), cex=0.7)
+  x1 <- (quality@average.background >= testMinimum & quality@average.background <= testMaximum)
+  
+  mtext(paste("Data should be between the two lines representing a spread of 20"), side=4, font=1, cex=0.7)
+  par(cex.axis=0.8, cex.lab=0.8) 
+  
+  boxplot(quality@average.background)
+  title(main="Average background intensity")
+  
+  if(backgroundMax - backgroundMin <= 20)
+  {
+    title(xlab="Background QC: OK (spread <= 20)")
+  } 
+  else
+  {
+    title(xlab="Background QC: not OK (spread > 20)")
+  }     
+  
+  legend("bottomright", c(paste("min = ", round(backgroundMin,2), sep="" ), paste("max = ", round(backgroundMax,2), sep="" ), paste("max-min = ", round(backgroundMax-backgroundMin,2), sep="")), cex=0.7)        
+  
+  mtext("Background Intensity Plot", side=3, outer=TRUE, cex=1.2, font=2)
+  
+  dev.off()
+  
+  setwd("..")
+  
+} 
+
 
 ###################
 # RNA Degradation #
@@ -504,30 +621,20 @@ mvaPlot<-function(data,data.rmaexp,data.mas5exp){
 }
 
 
+
+
+  
 #######
 # PCA #
 #######
-chipPCA <- function(data,CELnames){
-  print("PCA")
-  dir.create("PCA", showWarnings = FALSE)
-  setwd("PCA")
-  
-  PCA<-prcomp(t(exprs(data)))
-  # Übersicht Hauptkomponenten
-  png(filename = "PCA.png")
-  plot(PCA,main = "Hauptkomponentenanalyse - erklärende Varianz" )
-  dev.off()
-  
-  # Plot 1. und 2. Hauptkomponente
-  png(filename = "PCA2.png")
-  plot(PCA$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse")
-  grid()
-  legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
-  dev.off()
-  
-  setwd("..")
-}
-
+# chipPCA <- function(data){
+#   PCA<-prcomp(exprs(data))
+#   summary(PCA)                  # Prints variance summary for all principal components.
+#   scatterplot3d(PCA$x[,1:3])
+#   scatterplot3d(PCA$x[,2:4])
+#   scatterplot3d(PCA$x[,3:5])
+#   scatterplot3d(PCA$x[,4:6])
+#   }
 
 
 ###################################################################################################
@@ -540,17 +647,7 @@ chipPCA <- function(data,CELnames){
 #################
 mainAnalyse<- function(resolution = 7500,scale = 500){
 
-  ######################################
-  # Installieren der benötigten Pakete #
-  ######################################
-  #source("http://bioconductor.org/biocLite.R")
-  #biocLite("affy")
-  #biocLite("affyPLM")
-  #biocLite("hgu133plus2.db") # Chip-Datenbank
-  #biocLite("affyQCReport")
-  #biocLite("panp")
-  #biocLite("scatterplot3d")
-  #biocLite("AffyRNADegradation")
+
   
   
   #####################
@@ -605,49 +702,47 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     setwd(dir[j])
 
   # Aufrufen der Funktionen
-#     writeInfo(data)
-# 
-#     detectionCall(data,PNGnames,colors,CELnames)
-# 
-#     data.rma <- writeRMA(data,dir,j)
-#     data.rmaexp <- exprs(data.rma)
-# 
-#     data.mas5 <- writeMAS5(data,dir,j,scale)
-#     data.mas5exp <- exprs(data.mas5)
-#     data.mas5calls <- mas5calls(data)
-# 
-#     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
-# 
-#     chipImages(data,PNGnames,resolution)
-# 
-#     chipBoxplot(data,data.mas5exp,data.rmaexp)
-# 
-#     rawdata(data,dir,j)
-# 
-#     pmdata(data,dir,j,data.proGen)
-# 
-#     mmdata(data,dir,j,data.proGen)
-# 
-#     chipDensity(data,CELnames,j,dir)
-# 
-#     chipCluster(data,data.rmaexp,data.mas5exp)
-#   
-#     correlplot(data,data.mas5)
-# 
-#     geneOverAll(data,data.rmaexp,data.mas5exp)
-# 
-#     RNADegrad(data)
-#   
-#     chipScatter(data,data.rmaexp,data.mas5exp)
-#   
-#     qc_stats_plot(data)
-#  
-#     mvaPlot(data,data.rmaexp,data.mas5exp)
-  
-      chipPCA(data,CELnames)
-    
-    
+    writeInfo(data)
 
+    detectionCall(data,PNGnames,colors,CELnames)
+
+    data.rma <- writeRMA(data,dir,j)
+    data.rmaexp <- exprs(data.rma)
+
+    data.mas5 <- writeMAS5(data,dir,j,scale)
+    data.mas5exp <- exprs(data.mas5)
+    data.mas5calls <- mas5calls(data)
+
+    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+
+    chipImages(data,PNGnames,resolution)
+
+    chipBoxplot(data,data.mas5exp,data.rmaexp)
+
+    rawdata(data,dir,j)
+
+    pmdata(data,dir,j,data.proGen)
+
+    mmdata(data,dir,j,data.proGen)
+
+    chipDensity(data,CELnames,j,dir)
+
+    chipCluster(data,data.rmaexp,data.mas5exp)
+  
+    correlplot(data,data.mas5)
+
+    geneOverAll(data,data.rmaexp,data.mas5exp)
+
+    RNADegrad(data)
+  
+    chipScatter(data,data.rmaexp,data.mas5exp)
+  
+    qc_stats_plot(data)
+ 
+    mvaPlot(data,data.rmaexp,data.mas5exp)
+    
+    backgroundPlot(data)
+  
   # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
     setwd("../..")
