@@ -474,9 +474,9 @@ RNADegrad <- function(data){
   dir.create("RNA_Degradation", showWarnings = FALSE)
   setwd("RNA_Degradation")  
   data.rnadeg <- RNADegradation(data)
-    png(filename = "RNA_Degradation.png")
-    plotDx(data.rnadeg)
-    dev.off()
+  png(filename = "RNA_Degradation.png")
+  plotAffyRNAdeg(data.rnadeg)
+  dev.off()
   setwd("..")
 }
 
@@ -751,7 +751,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     geneOverAll(data,data.rmaexp,data.mas5exp)
 # 
-#     RNADegrad(data)
+      RNADegrad(data)
 #   
 #     chipScatter(data,data.rmaexp,data.mas5exp)
 #   
@@ -761,7 +761,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 #     
 #     backgroundPlot(data)
   
-    chipPCA(data,CELnames)
+#     chipPCA(data,CELnames)
     
   
   # Ende eines Experiment -> Verlasse Ordner
