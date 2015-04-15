@@ -6,6 +6,7 @@ import java.util.*;
 import micro_array.ExecuteR;
 import micro_array.input;
 import micro_array.micro_math;
+import micro_array.output;
 
 public class main {
 	//////////////////
@@ -31,12 +32,15 @@ public class main {
 		// Namen der Chips
 		String[] Celnames = Arrays.copyOfRange(mas5[0], 0, mas5.length);
 		
+		// Namen der Probes 
+		String[] mas5Names = output.getProbes(mas5);
+		
 		// Konvertiert in Matrix ohne erste Zeile und ohne erste Reihe
 		double[][] mas5Double = micro_math.makeDouble(mas5);
 
-		
+		// T-Test
 		double[] mas5test = micro_math.studT(mas5Double);
-		
+		output.writeTXT(mas5Names,mas5test,"p-values.txt");
 		
 		// Test-Ausgaben
 		//System.out.println(raw.length);
