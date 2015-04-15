@@ -6,8 +6,9 @@ import java.io.*;
 
 public class ExecuteR {
 	
-	
-	
+	////////////////////////////////
+	// Ausführen eines R-Skriptes //
+	////////////////////////////////
 	public static void runIt()throws IOException, InterruptedException{
 		Process p = Runtime.getRuntime().exec("cmd /c start /wait Rscript micro_array_R\\readCel.R");
 		System.out.println("Waiting for R ...");
@@ -15,8 +16,4 @@ public class ExecuteR {
 	    System.out.println("R done.");	
 	}
 	
-	public static void main(String[] args) throws IOException, InterruptedException{
-		
-		runIt();
-	}
 }

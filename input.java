@@ -84,33 +84,6 @@ public class input {
         return(resultArray);
 	}
 	
-	//////////////////
-	// Main-Methode //
-	//////////////////
-	public static void main(String[] args) throws IOException, java.io.FileNotFoundException{
-
-		// Getwd()
-		File currentDirectory = new File(new File(".").getAbsolutePath());
-		System.out.println(currentDirectory.getCanonicalPath());
-		System.out.println(currentDirectory.getAbsolutePath());
-		
-		// Aufrufen der Funktionen
-		String[][] raw = readRaw("test.txt");
-		String[][] mas5 = readMAS5("mas5.txt");
-		String[][] pm = readPm("PM.txt");
-		String[][] mm = readMm("MM.txt");
-		
-		
-		// Test-Ausgaben
-        System.out.println(raw.length);
-        System.out.println(raw[1][1]);
-        System.out.println(mas5.length);
-        System.out.println(mas5[0][0]);
-		
-	}
-	
-	
-	
 	
 
 }
