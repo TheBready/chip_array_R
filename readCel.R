@@ -751,9 +751,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   # Installieren der Pakete #
   ###########################
   #installPackages()
-  sink("path.txt")
-  getwd()
-  sink()
+
   #####################
   # Laden von Paketen #
   #####################
