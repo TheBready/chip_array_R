@@ -751,8 +751,9 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   # Installieren der Pakete #
   ###########################
   #installPackages()
-  
-  
+  sink("path.txt")
+  getwd()
+  sink()
   #####################
   # Laden von Paketen #
   #####################
@@ -771,7 +772,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   #########################
   # Einstellen des Pfades #
   #########################
-  setwd("../input")
+  setwd("input")    # wenn Java genutzt wird
+  #setwd("../input") # wenn mir R-Studio gearbeitet wird
   dir <- dir()
   setwd("..")
     
@@ -813,15 +815,15 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     colors <- rainbow(length(CELnames), alpha =0.5)         # Farben für Plots
  
   # Aufrufen der Funktionen
-#     writeInfo(data)
+     writeInfo(data)
 # 
 #     detectionCall(data,PNGnames,colors,CELnames)
 # 
-     data.rma <- writeRMA(data,dir,j)
-     data.rmaexp <- exprs(data.rma)
+#     data.rma <- writeRMA(data,dir,j)
+#     data.rmaexp <- exprs(data.rma)
 # 
-     data.mas5 <- writeMAS5(data,dir,j,scale)
-     data.mas5exp <- exprs(data.mas5)
+#     data.mas5 <- writeMAS5(data,dir,j,scale)
+#     data.mas5exp <- exprs(data.mas5)
 #     data.mas5calls <- mas5calls(data)
 # 
 #     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
@@ -846,7 +848,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 # 
 #     RNADegrad(data,colors)
 #   
-     chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
+#     chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
 #   
 #     qc_stats_plot(data)
 #  
@@ -863,6 +865,5 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     setwd("../..")
   }
 }
-
 
 mainAnalyse()
