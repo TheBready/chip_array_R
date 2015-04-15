@@ -1,7 +1,7 @@
 package micro_array;
 
 
-import java.io.*;
+import java.io.IOException;
 
 
 public class ExecuteR {

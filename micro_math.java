@@ -1,7 +1,6 @@
 package micro_array;
 
 import java.util.Arrays;
-
 import org.apache.commons.math3.stat.inference.TestUtils;
 
 public class micro_math {
@@ -37,6 +36,21 @@ public class micro_math {
 		return(result);
 	}
 	
+	
+	public static void sortIt(double[] mas5test, String[] mas5Names) {
+		for (int n = 0; n < mas5test.length-1; n++) {
+	        for (int m = 0; m < mas5test.length-2 - n; m++) {
+	            if ((mas5test[m]-mas5test[m + 1]) > 0) {
+	                double swapDouble = mas5test[m];
+	                mas5test[m] = mas5test[m + 1];
+	                mas5test[m + 1] = swapDouble;
+	                String swapString = mas5Names[m];
+	                mas5Names[m] = mas5Names[m + 1];
+	                mas5Names[m + 1] = swapString;
+	            }
+	        }
+	    }	  
+	}
 	
 
 }

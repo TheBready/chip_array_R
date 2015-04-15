@@ -2,17 +2,14 @@ package micro_array;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import micro_array.ExecuteR;
-import micro_array.input;
-import micro_array.micro_math;
-import micro_array.output;
+import java.util.Arrays;
 
 public class main {
+	         
 	//////////////////
 	// Main-Methode //
 	//////////////////
-	public static void main (String[] args) throws IOException, InterruptedException {		
+	public static void main(String[] args) throws IOException, InterruptedException{		
 		
 		// Getwd()
 		File currentDirectory = new File(new File(".").getAbsolutePath());
@@ -42,6 +39,9 @@ public class main {
 		double[] mas5test = micro_math.studT(mas5Double);
 		output.writeTXT(mas5Names,mas5test,"p-values.txt");
 		
+		micro_math.sortIt(mas5test,mas5Names);
+		
+		output.writeTXT(mas5Names,mas5test,"p-values_sorted.txt");
 		// Test-Ausgaben
 		//System.out.println(raw.length);
 		//System.out.println(raw[1][1]);

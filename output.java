@@ -1,8 +1,8 @@
 package micro_array;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 public class output {
 	
