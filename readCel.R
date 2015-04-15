@@ -747,8 +747,10 @@ chipPCA <- function(data,CELnames){
 # Main-Funktion #
 #################
 mainAnalyse<- function(resolution = 7500,scale = 500){
-
-
+  ###########################
+  # Installieren der Pakete #
+  ###########################
+  #installPackages()
   
   
   #####################
@@ -861,3 +863,6 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     setwd("../..")
   }
 }
+
+
+mainAnalyse()
