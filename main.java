@@ -20,8 +20,7 @@ public class main {
 		//starten der R-Skriptes 
 		ExecuteR.runIt();
 				
-		
-		
+	
 		// Laden der Dateien
 		System.out.println("Laden der Daten");
 	 	try{
@@ -58,5 +57,4 @@ public class main {
 			ex.printStackTrace();
 		}	
 	}
-
 }

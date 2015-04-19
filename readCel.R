@@ -22,9 +22,7 @@ installPackages <- function(){
   biocLite("panp")
   biocLite("scatterplot3d")
   biocLite("AffyRNADegradation")
-  
-}  
-
+  }
 
 ##############
 # Write Info #
@@ -767,6 +765,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
 
 
+
   #########################
   # Einstellen des Pfades #
   #########################
@@ -813,12 +812,12 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     colors <- rainbow(length(CELnames), alpha =0.5)         # Farben für Plots
  
   # Aufrufen der Funktionen
-     writeInfo(data)
+      writeInfo(data)
 
-    #detectionCall(data,PNGnames,colors,CELnames)
+      detectionCall(data,PNGnames,colors,CELnames)
 
-    data.rma <- writeRMA(data,dir,j)
-    data.rmaexp <- exprs(data.rma)
+      data.rma <- writeRMA(data,dir,j)
+      data.rmaexp <- exprs(data.rma)
 
     data.mas5 <- writeMAS5(data,dir,j,scale)
     data.mas5exp <- exprs(data.mas5)
