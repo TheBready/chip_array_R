@@ -46,11 +46,11 @@ public class main {
 	 		System.out.println("t-Test wird durchgefürt");
 	 		double[] mas5test = micro_math.studT(mas5Double);
 	 		System.out.println("Schreibe p-values in p-values.txt");
-	 		output.writeTXT(mas5Names,mas5test,"p-values.txt");
+	 		output.writeTXT(mas5Names,mas5test,"output/t-Test/p-values.txt");
 	 		System.out.println("Bubble-Sort für p-values");
 	 		micro_math.sortIt(mas5test,mas5Names);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
-			output.writeTXT(mas5Names,mas5test,"p-values_sorted.txt");		
+			output.writeTXT(mas5Names,mas5test,"output/t-Test/p-values_sorted.txt");		
 	 	}
 		catch(IOException ex) {
 			System.err.println("Kein Output-Ordner... Bitte lassen Sie erst readCel.R laufen!");
