@@ -1,6 +1,5 @@
 package micro_array;
 
-
 import java.io.IOException;
 
 
