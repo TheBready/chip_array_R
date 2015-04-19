@@ -815,7 +815,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   # Aufrufen der Funktionen
      writeInfo(data)
 
-    detectionCall(data,PNGnames,colors,CELnames)
+    #detectionCall(data,PNGnames,colors,CELnames)
 
     data.rma <- writeRMA(data,dir,j)
     data.rmaexp <- exprs(data.rma)
