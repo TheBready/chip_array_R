@@ -814,47 +814,47 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
  
   # Aufrufen der Funktionen
      writeInfo(data)
-# 
-#     detectionCall(data,PNGnames,colors,CELnames)
-# 
-#     data.rma <- writeRMA(data,dir,j)
-#     data.rmaexp <- exprs(data.rma)
-# 
-#     data.mas5 <- writeMAS5(data,dir,j,scale)
-#     data.mas5exp <- exprs(data.mas5)
-#     data.mas5calls <- mas5calls(data)
-# 
-#     histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
-# 
-#     chipImages(data,PNGnames,resolution)
-# 
-#     chipBoxplot(data,data.mas5exp,data.rmaexp)
-# 
-#     rawdata(data,dir,j)
-# 
-#     pmdata(data,dir,j,data.proGen)
-# 
-#     mmdata(data,dir,j,data.proGen)
-# 
-#     chipDensity(data,CELnames,j,dir)
-# 
-#     chipCluster(data,data.rmaexp,data.mas5exp)
-#   
-#     correlplot(data,data.mas5)
-# 
-#     geneOverAll(data,data.rmaexp,data.mas5exp)
-# 
-#     RNADegrad(data,colors)
-#   
-#     chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
-#   
-#     qc_stats_plot(data)
-#  
-#     mvaPlot(data,data.rmaexp,data.mas5exp)
-#     
-#     backgroundPlot(data)
+
+    detectionCall(data,PNGnames,colors,CELnames)
+
+    data.rma <- writeRMA(data,dir,j)
+    data.rmaexp <- exprs(data.rma)
+
+    data.mas5 <- writeMAS5(data,dir,j,scale)
+    data.mas5exp <- exprs(data.mas5)
+    data.mas5calls <- mas5calls(data)
+
+    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+
+    chipImages(data,PNGnames,resolution)
+
+    chipBoxplot(data,data.mas5exp,data.rmaexp)
+
+    rawdata(data,dir,j)
+
+    pmdata(data,dir,j,data.proGen)
+
+    mmdata(data,dir,j,data.proGen)
+
+    chipDensity(data,CELnames,j,dir)
+
+    chipCluster(data,data.rmaexp,data.mas5exp)
   
-#     chipPCA(data,CELnames)
+    correlplot(data,data.mas5)
+
+    geneOverAll(data,data.rmaexp,data.mas5exp)
+
+    RNADegrad(data,colors)
+  
+    chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
+  
+    qc_stats_plot(data)
+ 
+    mvaPlot(data,data.rmaexp,data.mas5exp)
+    
+    backgroundPlot(data)
+  
+    chipPCA(data,CELnames)
     
   
   # Ende eines Experiment -> Verlasse Ordner
