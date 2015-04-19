@@ -57,6 +57,12 @@ detectionCall <- function(data,PNGnames,colors,CELnames){
     dev.off() 
   }
   setwd("..")
+  #Erstellen der PMA.txt
+  print("Erstelle PMA.txt...")
+  dir.create("PMA", showWarnings =FALSE)
+  setwd("PMA")
+  write.table(data.PAcalls, file = "PMA_Calls.txt", row.names = TRUE, quote = FALSE)
+  setwd("..")
 }
 
 #######
@@ -358,7 +364,7 @@ rawdata <- function(data,dir,j){
   dir.create("exprs", showWarnings =FALSE)
   setwd("exprs")
   data.exp <- probes(data)
-  write.table(data.exp, file = gsub('.{0}$', '_signals.txt', dir[j]), row.names=TRUE)
+  write.table(data.exp, file = gsub('.{0}$', '_signals.txt', dir[j]), row.names=TRUE, quote = FALSE)
   setwd("..")
 }
 
@@ -370,7 +376,7 @@ pmdata <- function(data,dir,j,data.proGen){
   dir.create("pm", showWarnings =FALSE)
   setwd("pm")
   data.pm <- pm(data,data.proGen[,1])
-  write.table(data.pm, file = gsub('.{0}$', '_signals_PM.txt', dir[j]), row.names=TRUE)
+  write.table(data.pm, file = gsub('.{0}$', '_signals_PM.txt', dir[j]), row.names=TRUE, quote = FALSE)
   setwd("..")
 }
 
@@ -382,7 +388,7 @@ mmdata <- function(data,dir,j,data.proGen){
   dir.create("mm", showWarnings =FALSE)
   setwd("mm")
   data.mm <- mm(data,data.proGen[,1])
-  write.table(data.mm, file = gsub('.{0}$', '_signals_MM.txt', dir[j]), row.names=TRUE)
+  write.table(data.mm, file = gsub('.{0}$', '_signals_MM.txt', dir[j]), row.names=TRUE, quote = FALSE)
   setwd("..")
 }
 
@@ -812,12 +818,12 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     colors <- rainbow(length(CELnames), alpha =0.5)         # Farben für Plots
  
   # Aufrufen der Funktionen
-      writeInfo(data)
+    #writeInfo(data)
 
-      detectionCall(data,PNGnames,colors,CELnames)
+    detectionCall(data,PNGnames,colors,CELnames)
 
-      data.rma <- writeRMA(data,dir,j)
-      data.rmaexp <- exprs(data.rma)
+    data.rma <- writeRMA(data,dir,j)
+    data.rmaexp <- exprs(data.rma)
 
     data.mas5 <- writeMAS5(data,dir,j,scale)
     data.mas5exp <- exprs(data.mas5)
