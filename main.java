@@ -24,10 +24,10 @@ public class main {
 		// Laden der Dateien
 		System.out.println("Laden der Daten");
 	 	try{
-	 		String[][] raw =input.readRaw("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
+	 		//String[][] raw =input.readRaw("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
 	 		String[][] mas5 = input.readMAS5("output/ND_Group2_133Plus_2/MAS5/ND_Group2_133Plus_2_MAS5_500.txt");
-	 		String[][] pm = input.readPm("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
-	 		String[][] mm = input.readMm("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
+	 		//String[][] pm = input.readPm("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
+	 		//String[][] mm = input.readMm("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
 	 		String[][] pma = input.readPMA("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
 	 		
 		
@@ -45,25 +45,31 @@ public class main {
 	 		
 	 		// Überprüft ob alle Present in Gruppe
 	 		System.out.println("Erstelle Matrix der Daten");
-	 		String[] present = micro_math.isPresent(pma);
+	 		boolean[][] present = micro_math.isPresent(pma);
+	 		
+	 		// Filtert alle raus die nicht exprimiert werden
+	 		System.out.println("Daten werden gefiltert");
+	 		double[][] mas5_filtered = micro_math.filterIt(present,mas5Double);
+	 		String[] probes_filtered = micro_math.filterProbes(present, mas5Names);
+	 		
 	 		
 	 		//Erstellt Liste ob hoch oder niedrig exprimiert
 	 		System.out.println("Teste ob höher exprimiert in Gruppe 1 als Gruppe 2");
-	 		String[] express = micro_math.highOrLow(mas5Double);
+	 		String[] express = micro_math.highOrLow(mas5_filtered);
 
 	 		// T-Test
 	 		System.out.println("t-Test wird durchgefürt");
-	 		double[] mas5test = micro_math.studT(mas5Double);	 		
+	 		double[] mas5test = micro_math.studT(mas5_filtered);	 		
 	 		System.out.println("Schreibe p-values in p-values.txt");
 			File tdic = new File("output/ND_Group2_133Plus_2/t-Test/");
 	        tdic.mkdir();
-	 		output.writeTXT(mas5Names,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
+	 		output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
 	 		
 	 		//Merge and Sort
 	 		System.out.println("Bubble-Sort für p-values");
-	 		micro_math.sortIt(mas5test,mas5Names,express);
+	 		micro_math.sortIt(mas5test,probes_filtered,express);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
-			output.writeTXT(mas5Names,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 	 	}
 		catch(IOException ex) {
 			System.err.println("Kein Output-Ordner... Bitte lassen Sie erst readCel.R laufen!");

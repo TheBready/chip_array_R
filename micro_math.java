@@ -86,18 +86,57 @@ public class micro_math {
 	////////////////////////
 	// is a probe present //
 	////////////////////////
-	public static String[] isPresent(String[][] pma) {
-		String[] present = new String[pma.length];
-		int counter = 0;
+	public static boolean[][] isPresent(String[][] pma) {
+		boolean[][] present = new boolean[pma.length][2];
 		for (int n = 1; n < pma.length-1; n++) {
 			boolean group1 = (pma[n][1].charAt(0)=='P'&&pma[n][2].charAt(0)=='P'&&pma[n][3].charAt(0)=='P');
 			boolean group2 = (pma[n][4].charAt(0)=='P'&&pma[n][5].charAt(0)=='P'&&pma[n][6].charAt(0)=='P');
-			if (group1 || group2){
-				present[counter] = pma[n][0];
-				System.out.println(present[counter]);
-				counter++;
-			} 
+			present[n-1][0] = group1;
+			present[n-1][1] = group2;
 	    }
 		return(present);
+	}
+	
+	
+	///////////////////////
+	// Filter input Data //
+	///////////////////////
+	public static double[][] filterIt(boolean[][] present, double[][] mas5Double) {
+		int size = 0; 
+		for (int i = 0; i < present.length; i++) {
+			if(present[i][0]||present[i][1]){
+				size++;
+			}
+		}
+		int counter = 0;
+		double[][] mas5_filtered = new double[size][2];
+		for (int n = 0; n < present.length; n++) {
+			if(present[n][0]||present[n][1]){
+				mas5_filtered[counter] = Arrays.copyOfRange(mas5Double[n], 0, 6);
+				counter++;
+			}
+	    }
+		return(mas5_filtered);
+	}
+	
+	//////////////////////
+	// Filter Probe-IDs //
+	//////////////////////
+	public static String[] filterProbes(boolean[][] present, String[] probes) {
+		int size = 0; 
+		for (int i = 0; i < probes.length; i++) {
+			if(present[i][0]||present[i][1]){
+				size++;			
+			}
+		}
+		int counter = 0;
+		String[] probes_filtered = new String[size];
+		for (int n = 0; n < present.length; n++) {
+			if(present[n][0]||present[n][1]){
+				probes_filtered[counter] = probes[n];
+				counter++;
+			}
+	    }
+		return(probes_filtered);
 	}
 }
