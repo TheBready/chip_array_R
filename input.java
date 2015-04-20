@@ -85,7 +85,22 @@ public class input {
         return(resultArray);
 	}
 	
-	
-
+	////////////////////////////
+	////////////////////////////
+	public static String[][] readPMA(String table)throws java.io.FileNotFoundException,IOException{
+		File file = new File(table);
+		System.out.println("Import PMA data...");
+		Scanner input = new Scanner(file);
+		final int maxLines = 54676;
+		String[][] resultArray = new String[maxLines][];
+		int linesCounter = 0;
+		while (input.hasNextLine() && linesCounter < maxLines) {
+			resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
+			linesCounter++;
+		}
+		System.out.println(resultArray[1][1]);
+		input.close();
+		return(resultArray);
+	}
 }
 
