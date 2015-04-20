@@ -86,6 +86,7 @@ public class input {
 	}
 	
 	////////////////////////////
+	// Einlesen der PMA Daten //
 	////////////////////////////
 	public static String[][] readPMA(String table)throws java.io.FileNotFoundException,IOException{
 		File file = new File(table);
