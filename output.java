@@ -6,6 +6,10 @@ import java.io.PrintStream;
 
 public class output {
 	
+	/////////////////////////////
+	// Isolieren der Probe-IDs //
+	/////////////////////////////	
+	
 	public static String[] getProbes(String[][] data){
 		
 		String[] probes = new String[data.length];
@@ -15,12 +19,16 @@ public class output {
 	    }
 	    return(probes);
 	}
-	
-	public static void writeTXT(String[] probes, double[] values,String file) throws FileNotFoundException{
+
+	//////////////////////////
+	// Output in .txt-Datei //
+	//////////////////////////
+	public static void writeTXT(String[] probes,String[] express, double[] values,String file) throws FileNotFoundException{
 	
 	      PrintStream out = new PrintStream(new FileOutputStream(file));
+	        out.println("probes p-values expressed");
 	      for (int i = 0; i < values.length-1; i++){
-	        out.println(probes[i]+"			"+values[i]);
+	        out.println(probes[i]+" "+values[i]+" "+express[i]);
 	      }
 	      out.close();	      
 	    }
