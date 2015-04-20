@@ -1,5 +1,16 @@
+///////////////////////////////////////////
+// Einlesen und Analyse von .CEL-Dateien //
+//                 von                   //
+//       Nadine, Felix und Philipp       //
+//               Gruppe 2                //
+///////////////////////////////////////////
+//				MICRO_MATH				 //
+///////////////////////////////////////////
 package micro_array;
 
+////////////
+// Import //
+////////////
 import java.util.Arrays;
 import org.apache.commons.math3.stat.inference.TestUtils;
 
@@ -35,8 +46,6 @@ public class micro_math {
 			sample1[i] = Arrays.copyOfRange(data[i], 0, 3);
 			sample2[i] =  Arrays.copyOfRange(data[i], 3, 6);
 			result[i] = TestUtils.pairedTTest(sample1[i], sample2[i]);
-			System.out.print(sample1[i][2]);
-			System.out.println("   "+sample2[i][2]+"    "+result[i]);
 		}
 
 		return(result);
@@ -68,7 +77,7 @@ public class micro_math {
 	///////////////////////////
 	public static String[] highOrLow(double[][] mas5Double) {
 		String[] express = new String[mas5Double.length];
-
+		
 		for (int n = 0; n < mas5Double.length-1; n++) {
 			double group1 = (mas5Double[n][0]+mas5Double[n][1]+mas5Double[n][2])/3;
 			double group2 = (mas5Double[n][3]+mas5Double[n][4]+mas5Double[n][5])/3;

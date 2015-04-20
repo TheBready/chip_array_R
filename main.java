@@ -1,5 +1,16 @@
+///////////////////////////////////////////
+// Einlesen und Analyse von .CEL-Dateien //
+//                 von                   //
+//       Nadine, Felix und Philipp       //
+//               Gruppe 2  				 //
+///////////////////////////////////////////
+//				  MAIN					 //
+///////////////////////////////////////////
 package micro_array;
 
+////////////
+// Import //
+////////////
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,7 +44,7 @@ public class main {
 		
 	 		// Namen der Chips
 	 		System.out.println("Lese Chip-Namen");
-	 		String[] Celnames = Arrays.copyOfRange(mas5[0], 0, mas5.length);
+	 		String[] Celnames = Arrays.copyOfRange(mas5[0], 0, mas5[0].length);
 		
 	 		// Namen der Probes 
 	 		System.out.println("Lese Probeset-Namen");
@@ -70,6 +81,11 @@ public class main {
 	 		micro_math.sortIt(mas5test,probes_filtered,express);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
 			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+			
+			for(int i = 0; i < Celnames.length; i++){
+				System.out.println(Celnames[i]);
+			}
+
 	 	}
 		catch(IOException ex) {
 			System.err.println("Kein Output-Ordner... Bitte lassen Sie erst readCel.R laufen!");

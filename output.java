@@ -1,5 +1,16 @@
+///////////////////////////////////////////
+// Einlesen und Analyse von .CEL-Dateien //
+//                 von                   //
+//       Nadine, Felix und Philipp       //
+//               Gruppe 2                //
+///////////////////////////////////////////
+//				  OUTPUT				 //
+///////////////////////////////////////////
 package micro_array;
 
+////////////
+//Import  //
+////////////
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;

@@ -1,5 +1,16 @@
+///////////////////////////////////////////
+// Einlesen und Analyse von .CEL-Dateien //
+//                 von                   //
+//       Nadine, Felix und Philipp       //
+//               Gruppe 2                //
+///////////////////////////////////////////
+//				EXECUTE R				 //
+///////////////////////////////////////////
 package micro_array;
 
+////////////
+// Import //
+////////////
 import java.io.IOException;
 
 
