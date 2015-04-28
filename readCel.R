@@ -714,32 +714,92 @@ mvaPlot<-function(data,data.rmaexp,data.mas5exp){
 #######
 # PCA #
 #######
-chipPCA <- function(data,CELnames){
+chipPCA <- function(data,data.rmaexp, data.mas5exp, CELnames){
   print("PCA")
   dir.create("PCA", showWarnings = FALSE)
   setwd("PCA")
   
-  PCA<-prcomp(t(exprs(data)))
-  PCA_Scale<-prcomp(t(exprs(data)), scale=TRUE)
-  # Übersicht Hauptkomponenten
-  png(filename = "PCA.png")
+  #Rohdaten
+  #raw
+  dir.create("raw", showWarnings = FALSE)
+  setwd("raw")
+  PCA<-prcomp(t(exprs(data))) #pca Rohdaten
+  png(filename = "PCA.png") #Übersicht Hauptkomponenten
   plot(PCA,main = "Hauptkomponentenanalyse - erklärende Varianz" )
   dev.off()
-  
-  
-  # Plot 1. und 2. Hauptkomponente
-  png(filename = "PCA2.png")
+  png(filename = "PCA_data.png")
   plot(PCA$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse")
   grid()
   legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
   dev.off()
+  setwd("..")
+  
+ 
+  #skalierte Daten
+  dir.create("scale", showWarnings = FALSE)
+  setwd("scale")
+  PCA_Scale<-prcomp(t(exprs(data)), scale=TRUE)# pca Rohdaten skaliert
   png(filename = "PCA_Scale.png")
-  plot(PCA_Scale$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse")
+  plot(PCA_Scale,main = "Hauptkomponentenanalyse - erklärende Varianz (Skalierte Daten)")
+  dev.off()
+  png(filename = "PCA_data_Scale.png")
+  plot(PCA_Scale$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse skalierte Daten")
   grid()
   legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
   dev.off()
   setwd("..")
-}
+  
+  #MAS5 Daten
+  dir.create("mas5", showWarnings = FALSE)
+  setwd("mas5") 
+  PCA_MAS5<-prcomp(t(data.mas5exp)) #pca MAS5
+  png(filename = "PCA_MAS5.png")
+  plot(PCA_MAS5,main = "Hauptkomponentenanalyse - erklärende Varianz (MAS5-Daten)")
+  dev.off()
+  png(filename = "PCA_data_MAS5.png")
+  plot(PCA_MAS5$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse MAS5-Daten")
+  grid()
+  legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
+  dev.off()
+  setwd("..")
+
+  #RMA DAten
+  dir.create("rma", showWarnings = FALSE)
+  setwd("rma") 
+  PCA_RMA<-prcomp(t(data.rmaexp)) #pca RMA
+  png(filename = "PCA_RMA.png")  #Übersicht HAuptkomponenten
+  plot(PCA_RMA,main = "Hauptkomponentenanalyse - erklärende Varianz (RMA-Daten)" )
+  dev.off()
+  png(filename = "PCA_data_RMA.png") 
+  plot(PCA_RMA$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "Hauptkomponentenanalyse RMA-Daten")
+  grid()
+  legend("top",legend=CELnames, pch=c(1:length(CELnames)),pt.cex=1.5)
+  dev.off()
+  setwd("..")
+  
+  #Zusammenfassung
+  png(filename = "Übersicht erklärende Varianz")
+  par(mfrow=c(2,2))
+  plot(PCA,main = "Rohdaten-erklärende Varianz")
+  plot(PCA_Scale,main = "skalierte Daten-erklärende Varianz")
+  plot(PCA_MAS5,main = "MAS5-Daten-erklärende Varianz")
+  plot(PCA_RMA,main = "RMA-erklärende Varianz" )
+  dev.off()
+  
+  
+  png(filename = "PCA Übersicht")
+  par(mfrow=c(2,2))
+  plot(PCA$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "PCA Rohdaten")
+  plot(PCA_Scale$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "PCA skalierte Daten")
+  plot(PCA_MAS5$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "PCA MAS5-Daten")
+  plot(PCA_RMA$x, col=1, pch=c(1:length(CELnames)), las=1, cex=2, main = "PCA RMA-Daten")
+  dev.off()
+  
+  setwd("..")
+} 
+ 
+  
+ 
 
 
 ###################################################################################################
@@ -775,8 +835,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   #########################
   # Einstellen des Pfades #
   #########################
-  setwd("input")    # wenn Java genutzt wird
-  #setwd("../input") # wenn mir R-Studio gearbeitet wird
+  #setwd("input")    # wenn Java genutzt wird
+  setwd("../input") # wenn mir R-Studio gearbeitet wird
   dir <- dir()
   setwd("..")
     
@@ -791,7 +851,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
   for(j in 1:length(dir)){
     
   # Erstellen des Output Ordners  
-    print("Erstellen der Output-Odners")
+    print("Erstellen der Output-Odner")
     dir.create("output", showWarnings =FALSE)
     setwd("output")
     dir.create(dir[j], showWarnings =FALSE)
@@ -829,11 +889,11 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     data.mas5exp <- exprs(data.mas5)
     data.mas5calls <- mas5calls(data)
 
-    histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
+    #histogramms(data,PNGnames,CELnames,colors,data.mas5exp,data.rmaexp)
 
-    chipImages(data,PNGnames,resolution)
+    #chipImages(data,PNGnames,resolution)
 
-    chipBoxplot(data,data.mas5exp,data.rmaexp)
+    #chipBoxplot(data,data.mas5exp,data.rmaexp)
 
     rawdata(data,dir,j)
 
@@ -841,25 +901,25 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
 
     mmdata(data,dir,j,data.proGen)
 
-    chipDensity(data,CELnames,j,dir)
+    #chipDensity(data,CELnames,j,dir)
 
-    chipCluster(data,data.rmaexp,data.mas5exp)
+    #chipCluster(data,data.rmaexp,data.mas5exp)
   
-    correlplot(data,data.mas5)
+    #correlplot(data,data.mas5)
 
-    geneOverAll(data,data.rmaexp,data.mas5exp)
+    #geneOverAll(data,data.rmaexp,data.mas5exp)
 
-    RNADegrad(data,colors)
+    #RNADegrad(data,colors)
   
-    chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
+    #chipScatter(data,data.rmaexp,data.mas5exp,CELnames)
   
-    qc_stats_plot(data)
+    #qc_stats_plot(data)
  
-    mvaPlot(data,data.rmaexp,data.mas5exp)
+    #mvaPlot(data,data.rmaexp,data.mas5exp)
     
-    backgroundPlot(data)
+    #backgroundPlot(data)
   
-    chipPCA(data,CELnames)
+    chipPCA(data, data.rmaexp, data.mas5exp, CELnames)
     
   
   # Ende eines Experiment -> Verlasse Ordner
