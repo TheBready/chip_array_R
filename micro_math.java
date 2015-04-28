@@ -165,7 +165,7 @@ public class micro_math {
 	
 	// gets the basic folder directory
 	// a Signal Log Ratio of 1.0 indicates an increase of the transcript level by 2 fold and -1.0 indicates a decrease by 2 fold
-	// creates file with all SLR values (calculated out of MAS5 and PMA)
+	// creates folder SLR and files with all SLR values (calculated out of MAS5 and PMA)
 	// create table with R (call SLR_script)
 	public static void SLR(String folder){
 		
