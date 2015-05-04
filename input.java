@@ -86,7 +86,7 @@ public class input {
         String[][] resultArray = new String[maxLines][];
         int linesCounter = 0;
         while (input.hasNextLine() && linesCounter < maxLines) {
-            resultArray[linesCounter] = input.nextLine().split("	"); //Hier ist es ein Tab
+            resultArray[linesCounter] = input.nextLine().split("\t"); //Hier ist es ein Tab
             linesCounter++;
         }
         input.close();
