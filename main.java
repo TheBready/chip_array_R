@@ -17,20 +17,6 @@ import java.util.Arrays;
 
 public class main {
 	
-	//////////////////
-	// Sub-Methoden //
-	//////////////////
-	
-    public static void pause()
-    {
-        try
-        {
-            Thread.sleep(5000);
-        }
-        catch(Exception e)
-        {
-        }
-    }
 	         
 	//////////////////
 	// Main-Methode //
@@ -54,7 +40,7 @@ public class main {
         images.start();
         
 
-        // R-Skripte beenden
+        // Warte auf Ende der R-Skripte
         MVA.join();
         main_analyse.join();
         images.join();
@@ -65,10 +51,10 @@ public class main {
 		System.out.println("Laden der Daten");
 	 	try{
 	 		//String[][] raw =input.readRaw("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
-	 		String[][] mas5 = input.readMAS5("output/ND_Group2_133Plus_2/MAS5/ND_Group2_133Plus_2_MAS5_500.txt");
+	 		String[][] mas5 = input.readFile("output/ND_Group2_133Plus_2/MAS5/ND_Group2_133Plus_2_MAS5_500.txt");
 	 		//String[][] pm = input.readPm("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
 	 		//String[][] mm = input.readMm("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
-	 		String[][] pma = input.readPMA("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
+	 		String[][] pma = input.readFile("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
 	 		
 		
 	 		// Namen der Chips

@@ -18,6 +18,27 @@ import java.util.Scanner;
 
 
 public class input {
+	
+	////////////////////////////
+	// Einlesen der raw Daten //
+	////////////////////////////
+	public static String[][] readFile(String table)throws java.io.FileNotFoundException,IOException{
+		File file = new File(table);
+        System.out.println("Import raw data...");
+        Scanner input = new Scanner(file);
+        int maxLines = 0;
+        while (input.hasNextLine()) {
+            maxLines++;
+        }
+        String[][] resultArray = new String[maxLines][];
+        int linesCounter = 0;
+        while (input.hasNextLine() && linesCounter < maxLines) {
+            resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
+            linesCounter++;
+        }
+        input.close();
+        return(resultArray);
+	}
 
 	////////////////////////////
 	// Einlesen der raw Daten //

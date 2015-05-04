@@ -16,13 +16,17 @@ import java.io.IOException;
 
 public class ExecuteR extends Thread{
 	
-	////////////////////////////////
-	// Ausführen eines R-Skriptes //
-	////////////////////////////////
+	//////////////////////////////////
+	// Konstruktor eines R-Skriptes //
+	//////////////////////////////////
 	ExecuteR(String path){
 	setName(path);
 	}
 	
+	
+	////////////////////////////////
+	// Ausführen eines R-Skriptes //
+	////////////////////////////////
 	public void run(){
 		try {
 			String rscriptpath = getName();
