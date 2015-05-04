@@ -14,16 +14,28 @@ package micro_array;
 import java.io.IOException;
 
 
-public class ExecuteR {
+public class ExecuteR extends Thread{
 	
 	////////////////////////////////
 	// Ausführen eines R-Skriptes //
 	////////////////////////////////
-	public static void runIt(String rscriptpath)throws IOException, InterruptedException{
-		Process p = Runtime.getRuntime().exec("cmd runas /profile /user:Administrator /savecred /c start /wait Rscript "+rscriptpath);
-		System.out.println("Waiting for R ...");
-	    p.waitFor();
-	    System.out.println("R done.");	
+	ExecuteR(String path){
+	setName(path);
+	}
+	
+	public void run(){
+		try {
+			String rscriptpath = getName();
+			Process p;
+			p = Runtime.getRuntime().exec("cmd runas /profile /user:Administrator /savecred /c start /wait Rscript "+rscriptpath);
+			System.out.println("Waiting for R with "+rscriptpath+" ...");
+			p.waitFor();
+	    	System.out.println("R done with "+rscriptpath);	
+		} 
+		catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+
+		}
 	}
 	
 }

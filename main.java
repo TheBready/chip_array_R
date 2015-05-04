@@ -16,6 +16,21 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class main {
+	
+	//////////////////
+	// Sub-Methoden //
+	//////////////////
+	
+    public static void pause()
+    {
+        try
+        {
+            Thread.sleep(5000);
+        }
+        catch(Exception e)
+        {
+        }
+    }
 	         
 	//////////////////
 	// Main-Methode //
@@ -28,10 +43,24 @@ public class main {
 		System.out.println(currentDirectory.getAbsolutePath());
 		
 		
-		//starten der R-Skriptes 
-		ExecuteR.runIt("micro_array_R\\readCel.R");
-				
-	
+		// Erstellen der Objekte der R-Skripte
+        ExecuteR images = new ExecuteR("micro_array_R\\images.R");
+        ExecuteR MVA = new ExecuteR("micro_array_R\\MVA.R");
+        ExecuteR main_analyse = new ExecuteR("micro_array_R\\main-analyse.R");
+        
+		// Starten der R-Skripte
+        main_analyse.start();
+        MVA.start();
+        images.start();
+        
+
+        // R-Skripte beenden
+        MVA.join();
+        main_analyse.join();
+        images.join();
+
+        
+		
 		// Laden der Dateien
 		System.out.println("Laden der Daten");
 	 	try{
