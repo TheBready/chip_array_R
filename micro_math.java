@@ -11,8 +11,17 @@ package micro_array;
 ////////////
 // Import //
 ////////////
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+
 import org.apache.commons.math3.stat.inference.TestUtils;
+
 
 public class micro_math {
 	
@@ -148,7 +157,7 @@ public class micro_math {
 	    }
 		return(probes_filtered);
 	}
-///////////////////////////////
+    ///////////////////////////////
 	// Log to base 2 calculation //
 	///////////////////////////////
 	
