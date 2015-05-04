@@ -29,7 +29,7 @@ public class main {
 		
 		
 		//starten der R-Skriptes 
-		//ExecuteR.runIt();
+		ExecuteR.runIt("micro_array_R\\readCel.R");
 				
 	
 		// Laden der Dateien
@@ -81,6 +81,8 @@ public class main {
 	 		micro_math.sortIt(mas5test,probes_filtered,express);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
 			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+			
+			micro_math.SLR("C:/Users/Felix/OwnCloud/Studium/7. Fachsemester/Software-Praktikum/workspace/micro_array");
 			
 			for(int i = 0; i < Celnames.length; i++){
 				System.out.println(Celnames[i]);
