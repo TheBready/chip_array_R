@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 
-public class main {
+public class micro_main {
 	
 	         
 	//////////////////

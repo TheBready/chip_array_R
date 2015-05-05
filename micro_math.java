@@ -134,6 +134,7 @@ public class micro_math {
 				group2count++;		
 			}
 			
+			//Auswertung
 			if((group1count/3)>=treshold){
 				group1 = true;
 			}
