@@ -180,6 +180,25 @@ public class micro_math {
 		return lnr.getLineNumber()+1;
 	}
 	
+	////////////////////////////////
+	// convert String[] to double //
+	////////////////////////////////
+	
+	// gets a line of MAS5 and converts it's values to double values + returns
+	public static double convMAS5toDouble(String[] line){
+		
+		// save converted values in double array
+		double[] doubleParser = new double[line.length];
+		
+		// convert
+		for (int i = 1; i < line.length; i++) {
+			doubleParser[i] = Double.parseDouble(line[i]);
+		}
+		
+		// return value calculated by slrMAS5Value function
+		return slrMAS5Value(doubleParser);
+	}
+	
 	/////////////////////////////
 	// calc SLR (MAS5 - 2sets) //
 	/////////////////////////////
