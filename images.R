@@ -1,5 +1,6 @@
 #########################################
 # Einlesen und Analyse von .CEL-Dateien #
+#             Chip-Images               #
 #                 von                   #
 #       Nadine, Felix und Philipp       #
 #               Gruppe 2                #
@@ -183,6 +184,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     
     
     chipImages(data,PNGnames,resolution)
+    
+    
     
     
     # Ende eines Experiment -> Verlasse Ordner
