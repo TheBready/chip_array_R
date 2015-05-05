@@ -167,6 +167,20 @@ public class micro_math {
 		return Math.log(var) / Math.log(2);
 	}
 	
+	
+	//////////////////////////////
+	// countLines of a Document //		(online Source : http://stackoverflow.com/questions/453018/number-of-lines-in-a-file-in-java)
+	//////////////////////////////
+	
+	public static int countLines(String dir) throws IOException {
+		
+		LineNumberReader  lnr = new LineNumberReader(new FileReader(new File(dir)));
+		lnr.skip(Long.MAX_VALUE);
+		lnr.close();
+		return lnr.getLineNumber()+1;
+	}
+	
+	
 	///////////////////////
 	// SLR - Calculation //
 	// (Signal Log Ratio)//
