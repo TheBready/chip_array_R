@@ -210,77 +210,86 @@ public class micro_math {
 	// (Signal Log Ratio)//
 	///////////////////////
 	
-	// gets the basic folder directory
-	// a Signal Log Ratio of 1.0 indicates an increase of the transcript level by 2 fold and -1.0 indicates a decrease by 2 fold
-	// creates folder SLR and files with all SLR values (calculated out of MAS5 and PMA)
-	// create table with R (call SLR_script)
-	public static void SLR(String folder){
-		
-		
+
+	public static void SLR(String folder, double thresholdFilter){
+			
 		// get directories ( works just for our path-system)
 		String MAS5dir = (folder + "\\output\\ND_Group2_133Plus_2\\MAS5\\ND_Group2_133Plus_2_MAS5_500.txt");
 		String PMAdir = (folder + "\\output\\ND_Group2_133Plus_2\\PMA\\PMA_Calls.txt"); // PMA file
-		
-		//create your BufferedReaders to get specific content (see later code)
-		BufferedReader r;
-		BufferedReader r1;
-		BufferedReader r2;
-		BufferedReader r3 = null;
-		
+	
+		//create your BufferedReaders to get specific content (see code below ;))
+		BufferedReader rPMA;
+		BufferedReader rMAS5;		
 
 		// create output Folder (Windows)
 		// if used for other OS, change output
 		File f = null;
 		f = new File(folder + "\\output\\ND_Group2_133Plus_2\\SLR");
 		f.mkdirs(); // creates the folder
+				
+		////////////////////////////
+		// get chip names & count //
+		////////////////////////////
 		
-		
-		int counter = 0;
-		// get the amount of columns in our files
 		int size 	= 0;
-		
-		// read MAS5 file (created by R_script)	
+		String chipNames[] = null;
+		// save chip names (from PMA_calls.txt)
+
+		// read PMA file (created by R_script) to get the used amount of chips
 		try{
 			// get new FileReader object to get every different line
-			r1 = new BufferedReader(new FileReader(MAS5dir));
-			
+			rPMA = input.BfReader(PMAdir);		
 			// get columns count
-			size = r1.readLine().split("\t").length;
-			
+			chipNames = rPMA.readLine().split(" ");
+			size = chipNames.length;
 			// close stream
-			r1.close();
+			rPMA.close();
+			
 		// catch exceptions			
 		} catch (FileNotFoundException e) {
 			System.out.println("Wrong file or directory.");
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("Couldnt read file.");
-			e.printStackTrace();
-					
+			e.printStackTrace();			
 		}
 
-		// read PMA file (created by R_script)
+		/////////////////////////////////
+		// count absent genes in chips //
+		/////////////////////////////////
+		
+		int countedLines = 0;
+		// get Lines from document (needed for correct count calculations -> counter needs to be an Array of countedLines size)
+		try {
+			countedLines = countLines(PMAdir);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		// counts for every line, how many values where absent
+		int[] counter = new int[countedLines];
+		
 		
 		try{
 			// read PMA.txt file content into buffer
-			r2 = new BufferedReader(new FileReader(PMAdir));
+			rPMA = input.BfReader(PMAdir);
 			String countStr;
+			// to get the current position in the file
+			int currentLine = 0;
 			// save every line separate in countStr until there is no more 
-			while((countStr = r2.readLine())!=null) {
+			while((countStr = rPMA.readLine())!=null) {
 				// count all absents in PMA.txt
-				//System.out.println(counter); -> 229683 complete
 				for (int i=0; i < countStr.length()-1; ++i){
 					// look at PMA file to understand (typical PMA file line : "1552275_s_at A M M P P P") -> every letter represents one chiparray
 					if(countStr.charAt(i)== ' ' && countStr.charAt(i+1)=='A'){
-						counter++;
+						counter[currentLine]++;
 					} // close if
-				
-				}	// close for
-			}// close while	
+				// close for (int i=0; i < countStr.length()-1; ++i){
+				}
+				currentLine++;
+			}// close while((countStr = rPMA.readLine())!=null) {
 			// close stream
-			r2.close();
+			rPMA.close();
 		
-			
 		// catch exceptions
 		} catch (FileNotFoundException e) {
 			System.out.println("Wrong file or directory.");
@@ -289,37 +298,41 @@ public class micro_math {
 			e.printStackTrace();
 		}
 		
-
-		try {
-			
-			// create and write to file (windows)
-			r = new BufferedReader(new FileReader(MAS5dir));
-
-			FileWriter fw = null;
-			
-			// create file SLR_MAS5_500.txt -> we use MAS5 with 500
-			fw = new FileWriter( ""+f+"\\SLR_MAS5_500.txt" );
 		
-			String line;
-			
-			// get every line from SLR_MAS5_500.txt
-			while(( line =r.readLine())!= null){
-					//if more than 80% not absent
-		            if((counter / (size-1))>0.2){
-		            	//System.out.println(line); //testprint
-						fw.write(line);
-						// to  keep the right format
-						fw.append( System.getProperty("line.separator") );
+		//////////////////////////////////
+		// create Filtered_MAS5_500.txt //
+		//////////////////////////////////
+				
+		
+		int currentLine = 0;
+		// get every line, which is higher than the threshold and store it in Filtered_MAS5_500.txt
+		try {
+			// create and write to file (windows)
+			rMAS5 = input.BfReader(MAS5dir);
+			//FileWriter PMA = null;
+			FileWriter MAS5 = null;
+			// create file Filtered_PMA.txt to get just the fitting values
+			MAS5 = new FileWriter(""+f+"\\Filtered_MAS5_500.txt");
+			//to store every line for one loop
+			String readLine;
+			// get every line from MAS5_500.txt and filter it based on the wanted value (parameter thresholdFilter)
+			while(( readLine = rMAS5.readLine())!= null){
+					//if more than 80% not absent 
+		            if ( (1- ((double)counter[currentLine] / (double)(size))) > thresholdFilter){
+		            	
+		            	// write lines to file
+						MAS5.write(readLine);
+						// to  save every separate line
+						MAS5.append( System.lineSeparator() );
 													
-		            }	// end if
-					
-					// writes buffer data to file but doesn't close it (for next while loop)
-					fw.flush();
-			}	// end while
-			
+		            }	// end if ( (1- ((double)counter[currentLine] / (double)(size))) > thresholdFilter){
+				currentLine++;
+				// writes buffer data to file but doesn't close it (for next while loop)
+				MAS5.flush();				
+			}	// end while			
 			// close stream
-			fw.close();
-			
+			MAS5.close();
+			rMAS5.close();
 		// catch exceptions	
 		} catch (FileNotFoundException e) {
 			System.out.println("Wrong file or directory.");
@@ -327,90 +340,50 @@ public class micro_math {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		// slr value
-		Double slrValue; 
-		
-		// new file writer
-		FileWriter w = null;
-		
-		// used in while loop (line 311) to check in which line we are in
-		int countLine = 0;
-		
-		try{
-			// read SLR_MAS5_500 and load into buffer
-			r3 = new BufferedReader(new FileReader(""+f+"\\SLR_MAS5_500.txt"));
-			
-			String[] line;
-			String readLine;
-			
-			w = new FileWriter(""+f+"\\SLR_MAS5_500_values.txt");
-			//save all slr-values in SLR_MAS5_500_values.txt
-			
-			// 
-			ArrayList <String> chipNames = new ArrayList<String>();
-			
-
-			// get every line from SLR_MAS5_500.txt
-			while((readLine=r3.readLine())!=null){
 				
-
-				// saves in line every sub string of the line
-				line = readLine.split("\t");
-				// for the first line, where our chip-Names are located, we save them in our chipNames string
-
-				if (countLine == 0){
-					for(int l=0; l<line.length; ++l){
-						chipNames.add(line[l]);
-						// System.out.println(line[i]); // would print our chipNames
-					}
-				}
-				// not first line anymore
-				countLine++;
-
-				// use logBase2(double var) to get the log2 values
-
-				if (countLine > 1){
-					for (int i = 1; i < line.length; ++i){
-						for( int j = 1; j < line.length; ++j){
-
-							if(i!=j){
-
-								if(Double.parseDouble(line[i])<50&&Double.parseDouble(line[j])>500){
-									double d1 =Double.parseDouble(line[i]);
-
-									double d2 =Double.parseDouble(line[j]);
-
-									//calculate slr value
-									slrValue =(logBase2(d1))-(logBase2(d2));
-									// convert to string to save in file
-									String SLRstring = slrValue.toString();
-									// write slr in file
-									w.write(line[0]+"\t" + chipNames.get(i-1) + "\t" + chipNames.get(j-1) + ": " + SLRstring);
-									w.append( System.getProperty("line.separator") );
-
-								} // end inner if
-								if(Double.parseDouble(line[i])>500&&Double.parseDouble(line[j])<50){
-									//calculate slr value
-									slrValue=logBase2(Double.parseDouble(line[i])-logBase2(Double.parseDouble(line[j])));
-									// convert to string to save in file
-									String slrstring = slrValue.toString();
-									// write slr in file
-									w.write(line[0]+"\t"+chipNames.get(i-1)+"\t"+chipNames.get(j-1)+": "+slrstring);									
-									w.append( System.getProperty("line.separator") );
-
-								} // end 2. inner if
-							} // end if
-						} // end inner for loop
-					} // end outer for loop
-	
-				} // end outer if 
+		//////////////////////////////////
+		// finally calculate SLR Values //
+		//////////////////////////////////		
+		// slr value
+		double slrValue;		
+		// reset currentLine
+		currentLine = 0;		
+		// new file writer
+		FileWriter SLR = null;
 			
+
+		try {
 			
+			rMAS5 = input.BfReader(""+f+"\\Filtered_MAS5_500.txt");
+			SLR = new FileWriter(""+f+"\\SLR_Values.txt");
+			//save all slr-values in SLR_Values.txt
+			
+			// store all 
+			String[] splitLine = null;
+			String readLine;
+
+			// get every line from Filtered_PMA.txt
+			while((readLine = rMAS5.readLine())!=null){
+				
+				// ignore first line
+				if (currentLine != 0) {
+
+				// MAS5 variant:	
+				// get 2 sets of chips (example : 6 chips total ->  set1 = 1-3, set2 = 4-6)
+				// use the mean value of both sets for each gene to logBase2 (siehe functions convMAS5toDouble and slrMAS5Value)
+					
+					splitLine = readLine.split("\t");
+					//System.out.println(splitLine[1]);					
+					slrValue = convMAS5toDouble(splitLine);
+					// write gene name + slr value to file
+					SLR.write(splitLine[0] + "\t" + slrValue);
+					SLR.append( System.lineSeparator() );
+				
+				} // end if (currentLine != 0) {
+				currentLine++;
 			} // end while loop (line 311)
 			// close writing stream
-			w.close();
+			SLR.close();
 			
 		// catch exceptions	
 		}catch (FileNotFoundException e) {
@@ -418,13 +391,11 @@ public class micro_math {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
-		
-		
-		
-		
+		}		
 		
 	} // end SLR
+	
+	
+	
 }
 
