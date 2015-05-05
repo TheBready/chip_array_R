@@ -20,7 +20,32 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class input  {
+public class input extends Thread  {
+	
+    public String[][] inputString2D;
+
+    
+	//////////////////////////////
+	// Konstruktor eines Inputs //
+	//////////////////////////////
+	input(String file){
+	setName(file);
+	}
+    
+	/////////////////////////////
+	// Ausführen des Einlesens //
+	/////////////////////////////
+    
+    public void run(){
+		try {
+			inputString2D = readFile(getName());
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+
+		}
+	}
+
 	
 	///////////////////////////////////
 	// Zählen der Zeilen einer Datei //

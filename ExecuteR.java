@@ -16,6 +16,8 @@ import java.io.IOException;
 
 public class ExecuteR extends Thread{
 	
+	
+    
 	//////////////////////////////////
 	// Konstruktor eines R-Skriptes //
 	//////////////////////////////////

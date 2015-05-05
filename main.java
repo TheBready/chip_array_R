@@ -14,6 +14,7 @@ package micro_array;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 public class main {
 	
@@ -23,6 +24,9 @@ public class main {
 	//////////////////
 	public static void main(String[] args) throws IOException, InterruptedException{		
 		
+		// Start der Laufzeit-Messung
+ 	  	long start = new Date().getTime();
+
 		// Getwd()
 		File currentDirectory = new File(new File(".").getAbsolutePath());
 		System.out.println(currentDirectory.getCanonicalPath());
@@ -48,28 +52,49 @@ public class main {
 		// Laden der Dateien
 		System.out.println("Laden der Daten");
 	 	try{
-	 		String[][] raw =input.readFile("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
-	 		String[][] mas5 = input.readFile("output/ND_Group2_133Plus_2/MAS5/ND_Group2_133Plus_2_MAS5_500.txt");
-	 		String[][] pm = input.readFile("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
-	 		String[][] mm = input.readFile("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
-	 		String[][] pma = input.readFile("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
-	 		
-		
+
+			// Erstellen der Objekte zum Input
+	        input raw = new input("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
+	        input mas5 = new input("output/ND_Group2_133Plus_2/MAS5/ND_Group2_133Plus_2_MAS5_500.txt");
+	        input pm = new input("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
+	        input mm = new input("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
+	        input pma = new input("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
+
+	        // Starten des Einlesens
+	        raw.start();
+	        mas5.start();
+	        pm.start();
+	        mm.start();
+	        pma.start();
+	        
+
+	        // Warte auf Ende des Einlesens
+	        raw.join();
+	        mas5.join();
+	        pm.join();
+	        mm.join();
+	        pma.join();
+	        
+			System.out.println("test: "+mas5.inputString2D[0][1]);
+	
+
+	        
 	 		// Namen der Chips
 	 		System.out.println("Lese Chip-Namen");
-	 		String[] Celnames = Arrays.copyOfRange(mas5[0], 0, mas5[0].length);
+	 		String[] Celnames = Arrays.copyOfRange(mas5.inputString2D[0], 0, mas5.inputString2D[0].length);
+
 		
 	 		// Namen der Probes 
 	 		System.out.println("Lese Probeset-Namen");
-	 		String[] mas5Names = output.getProbes(mas5);
+	 		String[] mas5Names = output.getProbes(mas5.inputString2D);
 		
 	 		// Konvertiert in Matrix ohne erste Zeile und ohne erste Reihe
 	 		System.out.println("Erstelle Matrix der Daten");
-	 		double[][] mas5Double = micro_math.makeDouble(mas5);
+	 		double[][] mas5Double = micro_math.makeDouble(mas5.inputString2D);
 	 		
 	 		// Überprüft ob alle Present in Gruppe
 	 		System.out.println("Erstelle Matrix der Daten");
-	 		boolean[][] present = micro_math.isPresent(pma);
+	 		boolean[][] present = micro_math.isPresent(pma.inputString2D);
 	 		
 	 		// Filtert alle raus die nicht exprimiert werden
 	 		System.out.println("Daten werden gefiltert");
@@ -96,7 +121,7 @@ public class main {
 			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 			
 			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
-			String filePath = currentDirectory.getCanonicalPath();
+			//String filePath = currentDirectory.getCanonicalPath();
 			//micro_math.SLR(filePath, 0.2);
 			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
 			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
@@ -105,6 +130,10 @@ public class main {
 			for(int i = 0; i < Celnames.length; i++){
 				System.out.println(Celnames[i]);
 			}
+			
+			// Ende der Laufzeit-Messung
+			long runningTime = new Date().getTime() - start; 
+	        System.out.println("Laufzeit: "+(runningTime/1000)+" Sekunden");
 
 	 	}
 		catch(IOException ex) {
