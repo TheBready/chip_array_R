@@ -180,6 +180,31 @@ public class micro_math {
 		return lnr.getLineNumber()+1;
 	}
 	
+	/////////////////////////////
+	// calc SLR (MAS5 - 2sets) //
+	/////////////////////////////
+	public static double slrMAS5Value(double[] convLine){
+		
+		// where to devide the sets
+		int setBoarder = (convLine.length/2) + (convLine.length % 2); // odd length -> name : value-value | value-value, even length -> name: value | value-value
+		
+		double set1 = 0.0;
+		double set2 = 0.0;
+		
+		for (int i = 1; i < setBoarder ; i++) {
+			set1 = set1+convLine[i];
+			set2 = set2+convLine[setBoarder+i-1];
+		}
+		
+		double medianSet1 = set1/(setBoarder-1);
+		double medianSet2 = set2/(setBoarder-1);
+		
+		// final log2 based calculation
+		double slr = logBase2(medianSet1)/logBase2(medianSet2);
+		
+		return slr;
+	}
+	
 	
 	///////////////////////
 	// SLR - Calculation //
