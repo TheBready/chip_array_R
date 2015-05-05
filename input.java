@@ -11,25 +11,50 @@ package micro_array;
 ////////////
 // Import //
 ////////////
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 
-
-public class input {
+public class input  {
+	
+	///////////////////////////////////
+	// Zählen der Zeilen einer Datei //
+	///////////////////////////////////
+	
+	public static int countLines(String filename) throws IOException {
+	    InputStream is = new BufferedInputStream(new FileInputStream(filename));
+	    try {
+	        byte[] c = new byte[1024];
+	        int count = 0;
+	        int readChars = 0;
+	        boolean empty = true;
+	        while ((readChars = is.read(c)) != -1) {
+	            empty = false;
+	            for (int i = 0; i < readChars; ++i) {
+	                if (c[i] == '\n') {
+	                    ++count;
+	                }
+	            }
+	        }
+	        return (count == 0 && !empty) ? 1 : count;
+	    } finally {
+	        is.close();
+	    }
+	}
 	
 	////////////////////////////
-	// Einlesen der raw Daten //
+	// Einlesen der von Daten //
 	////////////////////////////
 	public static String[][] readFile(String table)throws java.io.FileNotFoundException,IOException{
 		File file = new File(table);
-        System.out.println("Import raw data...");
+        System.out.println("Import data...");
         Scanner input = new Scanner(file);
-        int maxLines = 0;
-        while (input.hasNextLine()) {
-            maxLines++;
-        }
+        int maxLines = countLines(table); 
+        System.out.println("Datei hat "+maxLines+" Zeilen.");
         String[][] resultArray = new String[maxLines][];
         int linesCounter = 0;
         while (input.hasNextLine() && linesCounter < maxLines) {
@@ -39,98 +64,7 @@ public class input {
         input.close();
         return(resultArray);
 	}
+	
 
-	////////////////////////////
-	// Einlesen der raw Daten //
-	////////////////////////////
-	public static String[][] readRaw(String table)throws java.io.FileNotFoundException,IOException{
-		File file = new File(table);
-        System.out.println("Import raw data...");
-        Scanner input = new Scanner(file);
-        final int maxLines = 604259;
-        String[][] resultArray = new String[maxLines][];
-        int linesCounter = 0;
-        while (input.hasNextLine() && linesCounter < maxLines) {
-            resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
-            linesCounter++;
-        }
-        input.close();
-        return(resultArray);
-	}
-	
-	
-	////////////////////////////
-	// Einlesen der pm Daten //
-	////////////////////////////
-	public static String[][] readPm(String table)throws java.io.FileNotFoundException,IOException{
-		File file = new File(table);
-        System.out.println("Import pm data...");
-        Scanner input = new Scanner(file);
-        final int maxLines = 459426;
-        String[][] resultArray = new String[maxLines][];
-        int linesCounter = 0;
-        while (input.hasNextLine() && linesCounter < maxLines) {
-            resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
-            linesCounter++;
-        }
-        input.close();
-        return(resultArray);
-	}
-	
-	////////////////////////////
-	// Einlesen der mm Daten //
-	////////////////////////////
-	public static String[][] readMm(String table)throws java.io.FileNotFoundException,IOException{
-		File file = new File(table);
-        System.out.println("Import mm data...");
-        Scanner input = new Scanner(file);
-        final int maxLines = 459426;
-        String[][] resultArray = new String[maxLines][];
-        int linesCounter = 0;
-        while (input.hasNextLine() && linesCounter < maxLines) {
-            resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
-            linesCounter++;
-        }
-        input.close();
-        return(resultArray);
-	}
-	
-	
-	////////////////////////////////
-	// Einlesen der MAS 5.0 Daten //
-	////////////////////////////////
-	public static String[][] readMAS5(String table)throws java.io.FileNotFoundException,IOException{
-		File file = new File(table);
-        System.out.println("Import MAS 5.0 data...");
-        Scanner input = new Scanner(file);
-        final int maxLines = 54676;
-        String[][] resultArray = new String[maxLines][];
-        int linesCounter = 0;
-        while (input.hasNextLine() && linesCounter < maxLines) {
-            resultArray[linesCounter] = input.nextLine().split("\t"); //Hier ist es ein Tab
-            linesCounter++;
-        }
-        input.close();
-        return(resultArray);
-	}
-	
-	////////////////////////////
-	// Einlesen der PMA Daten //
-	////////////////////////////
-	public static String[][] readPMA(String table)throws java.io.FileNotFoundException,IOException{
-		File file = new File(table);
-		System.out.println("Import PMA data...");
-		Scanner input = new Scanner(file);
-		final int maxLines = 54676;
-		String[][] resultArray = new String[maxLines][];
-		int linesCounter = 0;
-		while (input.hasNextLine() && linesCounter < maxLines) {
-			resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
-			linesCounter++;
-		}
-		System.out.println(resultArray[1][1]);
-		input.close();
-		return(resultArray);
-	}
 }
 

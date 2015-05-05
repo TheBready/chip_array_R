@@ -31,8 +31,8 @@ public class main {
 		
 		// Erstellen der Objekte der R-Skripte
         ExecuteR images = new ExecuteR("micro_array_R\\images.R");
-        ExecuteR MVA = new ExecuteR("micro_array_R\\MVA.R");
-        ExecuteR main_analyse = new ExecuteR("micro_array_R\\main-analyse.R");
+        ExecuteR MVA = new ExecuteR("micro_array_R\\normalisation.R");
+        ExecuteR main_analyse = new ExecuteR("micro_array_R\\raw-analysis.R");
         
 		// Starten der R-Skripte
         main_analyse.start();
@@ -43,17 +43,15 @@ public class main {
         // Warte auf Ende der R-Skripte
         MVA.join();
         main_analyse.join();
-        images.join();
-
-        
+        images.join();        
 		
 		// Laden der Dateien
 		System.out.println("Laden der Daten");
 	 	try{
-	 		//String[][] raw =input.readRaw("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
+	 		String[][] raw =input.readFile("output/ND_Group2_133Plus_2/exprs/ND_Group2_133Plus_2_signals.txt");
 	 		String[][] mas5 = input.readFile("output/ND_Group2_133Plus_2/MAS5/ND_Group2_133Plus_2_MAS5_500.txt");
-	 		//String[][] pm = input.readPm("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
-	 		//String[][] mm = input.readMm("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
+	 		String[][] pm = input.readFile("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
+	 		String[][] mm = input.readFile("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
 	 		String[][] pma = input.readFile("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
 	 		
 		
@@ -97,7 +95,7 @@ public class main {
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
 			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 			
-			micro_math.SLR("C:/Users/Felix/OwnCloud/Studium/7. Fachsemester/Software-Praktikum/workspace/micro_array");
+			//micro_math.SLR("C:/Users/Felix/OwnCloud/Studium/7. Fachsemester/Software-Praktikum/workspace/micro_array_II");
 			
 			for(int i = 0; i < Celnames.length; i++){
 				System.out.println(Celnames[i]);
