@@ -391,7 +391,7 @@ public class micro_math {
 				// get 2 sets of chips (example : 6 chips total ->  set1 = 1-3, set2 = 4-6)
 				// use the mean value of both sets for each gene to logBase2 (siehe functions convMAS5toDouble and slrMAS5Value)
 					
-					splitLine = readLine.split("\t");
+					splitLine = readLine.split(" ");
 					//System.out.println(splitLine[1]);					
 					slrValue = convMAS5toDouble(splitLine);
 					// write gene name + slr value to file
