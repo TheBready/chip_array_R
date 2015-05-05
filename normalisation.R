@@ -619,6 +619,7 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     # Ende eines Experiment -> Verlasse Ordner
     print("Bearbeiten des Experimentes beendet")
     sink()
+    print("Bearbeiten des Experimentes beendet")
     setwd("../..")
   }
 }
