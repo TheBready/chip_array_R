@@ -94,7 +94,8 @@ public class main {
 	 		
 	 		// Überprüft ob alle Present in Gruppe
 	 		System.out.println("Erstelle Matrix der Daten");
-	 		boolean[][] present = micro_math.isPresent(pma.inputString2D);
+	 		double treshold = 0.8; 
+	 		boolean[][] present = micro_math.isPresent(pma.inputString2D,treshold);
 	 		
 	 		// Filtert alle raus die nicht exprimiert werden
 	 		System.out.println("Daten werden gefiltert");
@@ -121,8 +122,8 @@ public class main {
 			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 			
 			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
-			//String filePath = currentDirectory.getCanonicalPath();
-			//micro_math.SLR(filePath, 0.2);
+			String filePath = currentDirectory.getCanonicalPath();
+			micro_math.SLR(filePath, 0.2);
 			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
 			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
 			

@@ -104,11 +104,42 @@ public class micro_math {
 	////////////////////////
 	// is a probe present //
 	////////////////////////
-	public static boolean[][] isPresent(String[][] pma) {
+	public static boolean[][] isPresent(String[][] pma, double treshold) {
 		boolean[][] present = new boolean[pma.length][2];
 		for (int n = 1; n < pma.length-1; n++) {
-			boolean group1 = (pma[n][1].charAt(0)=='P'&&pma[n][2].charAt(0)=='P'&&pma[n][3].charAt(0)=='P');
-			boolean group2 = (pma[n][4].charAt(0)=='P'&&pma[n][5].charAt(0)=='P'&&pma[n][6].charAt(0)=='P');
+			double group1count = 0;
+			double group2count = 0;
+			boolean group1 = false;
+			boolean group2 = false;
+
+			// Gruppe 1
+			if(pma[n][1].charAt(0)=='P'){
+				group1count++;
+			}
+			if(pma[n][2].charAt(0)=='P'){
+				group1count++;			
+			}
+			if(pma[n][3].charAt(0)=='P'){
+				group1count++;
+			}	
+			
+			// Gruppe 2
+			if(pma[n][4].charAt(0)=='P'){
+				group2count++;
+			}
+			if(pma[n][5].charAt(0)=='P'){
+				group2count++;
+			}
+			if(pma[n][6].charAt(0)=='P'){
+				group2count++;		
+			}
+			
+			if((group1count/3)>=treshold){
+				group1 = true;
+			}
+			if((group2count/3)>=treshold){
+				group2 = true;
+			}
 			present[n-1][0] = group1;
 			present[n-1][1] = group2;
 	    }
