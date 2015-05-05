@@ -31,18 +31,18 @@ public class main {
 		
 		// Erstellen der Objekte der R-Skripte
         ExecuteR images = new ExecuteR("micro_array_R\\images.R");
-        ExecuteR MVA = new ExecuteR("micro_array_R\\normalisation.R");
-        ExecuteR main_analyse = new ExecuteR("micro_array_R\\raw-analysis.R");
+        ExecuteR normalisation = new ExecuteR("micro_array_R\\normalisation.R");
+        ExecuteR raw_analysis = new ExecuteR("micro_array_R\\raw-analysis.R");
         
 		// Starten der R-Skripte
-        main_analyse.start();
-        MVA.start();
+        raw_analysis.start();
+        normalisation.start();
         images.start();
         
 
         // Warte auf Ende der R-Skripte
-        MVA.join();
-        main_analyse.join();
+        normalisation.join();
+        raw_analysis.join();
         images.join();        
 		
 		// Laden der Dateien
