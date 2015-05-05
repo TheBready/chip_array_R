@@ -65,6 +65,34 @@ public class input  {
         return(resultArray);
 	}
 	
-
+	////////////////////////////////////////////
+	// Einlesen von files über BufferedReader //
+	////////////////////////////////////////////
+	
+	// returns BufferedReader object
+	public static BufferedReader BfReader(String dir) {
+		//just a dummy
+		BufferedReader reader = null;	
+		// read file 
+		try{
+			BufferedReader r = new BufferedReader(new FileReader(dir));
+			return r;
+				
+		} catch (FileNotFoundException e) {
+			System.out.println("Wrong file or directory.");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Couldnt read file.");
+			e.printStackTrace();
+					
+		}
+		// dummy return to avoid error (function must always return a value)
+		return reader;
+	}
+	
+	
+	
+	
 }
+
 
