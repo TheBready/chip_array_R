@@ -97,7 +97,7 @@ public class main {
 			
 			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
 			String filePath = currentDirectory.getCanonicalPath();
-			micro_math.SLR(filePath, 0.2);
+			//micro_math.SLR(filePath, 0.2);
 			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
 			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
 			

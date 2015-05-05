@@ -12,11 +12,12 @@ package micro_array;
 // Import //
 ////////////
 import java.io.BufferedInputStream;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
 
 public class input  {
@@ -50,18 +51,20 @@ public class input  {
 	// Einlesen der von Daten //
 	////////////////////////////
 	public static String[][] readFile(String table)throws java.io.FileNotFoundException,IOException{
-		File file = new File(table);
         System.out.println("Import data...");
-        Scanner input = new Scanner(file);
+        FileReader fileReader = new FileReader(table);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
         int maxLines = countLines(table); 
         System.out.println("Datei hat "+maxLines+" Zeilen.");
         String[][] resultArray = new String[maxLines][];
+        String line = null;
         int linesCounter = 0;
-        while (input.hasNextLine() && linesCounter < maxLines) {
-            resultArray[linesCounter] = input.nextLine().split(" "); //Hier ist es ein Leerzeichen
+        while ((line = bufferedReader.readLine()) != null) {
+            resultArray[linesCounter] = line.split(" ");
             linesCounter++;
         }
-        input.close();
+        bufferedReader.close();
+        System.out.println("Daten importiert "+table);
         return(resultArray);
 	}
 	
@@ -81,17 +84,13 @@ public class input  {
 		} catch (FileNotFoundException e) {
 			System.out.println("Wrong file or directory.");
 			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("Couldnt read file.");
-			e.printStackTrace();
-					
-		}
+
 		// dummy return to avoid error (function must always return a value)
 		return reader;
 	}
 	
 	
-	
+	}
 	
 }
 
