@@ -95,7 +95,12 @@ public class main {
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
 			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 			
-			//micro_math.SLR("C:/Users/Felix/OwnCloud/Studium/7. Fachsemester/Software-Praktikum/workspace/micro_array_II");
+			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
+			String filePath = currentDirectory.getCanonicalPath();
+			micro_math.SLR(filePath, 0.2);
+			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
+			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
+			
 			
 			for(int i = 0; i < Celnames.length; i++){
 				System.out.println(Celnames[i]);
