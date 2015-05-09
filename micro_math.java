@@ -98,7 +98,7 @@ public class micro_math {
 			var = var + step*step;  	
 		}
 		
-		var = var/elements;
+		var = var/elements-1;
 		return(var);
 	}
 
