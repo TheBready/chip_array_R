@@ -47,7 +47,7 @@ public class micro_math {
 		double[][] correlation = new double[rows][rows];
 		for(int i=0;  i < rows; i++){
 			for(int j=0;  j < rows; j++){
-				correlation[i][j] = spearCorrelation(data[i],data[j]);
+				correlation[i][j] = pearCorrelation(data[i],data[j]);
 			}
 		}	
 		return(correlation);
@@ -56,7 +56,7 @@ public class micro_math {
 	/////////////////////////
 	// Pearson Correlation //
 	/////////////////////////
-	public static double spearCorrelation(double[] sample1, double[] sample2){
+	public static double pearCorrelation(double[] sample1, double[] sample2){
 		//cor(X, Y) = Sum[(xi - E(X))(yi - E(Y))] / [(n - 1)s(X)s(Y)] 
 		double correlation = 0;
 		double sd1 = sd(sample1);
@@ -65,10 +65,10 @@ public class micro_math {
 		double mean2 = mean(sample2);
 		int elements = sample1.length;
 		for(int i=0;  i < elements; i++){
-			correlation = correlation + (sample1[i]-mean1)*(sample2[i]-mean2);
+			correlation = correlation + ((sample1[i]-mean1)*(sample2[i]-mean2));
 		}
 		
-		correlation = correlation / ((elements-1)*sd1*sd2);
+		correlation = ((correlation) / (sd1*sd2))/elements;
 		return(correlation);
 	}
 	
@@ -95,10 +95,10 @@ public class micro_math {
 		double meanList = mean(list);
 		for(int i=0;  i < elements; i++){
 			double step = list[i]-meanList;
-			var = var + step*step;  	
+			var = var + step*step;  
 		}
 		
-		var = var/elements-1;
+		var = var/elements;
 		return(var);
 	}
 

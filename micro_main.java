@@ -125,6 +125,7 @@ public class micro_main {
 			// test for coexpressed Genes 
 			System.out.println("Teste auf coexpremierte Gene");
 			double[][] mas5correlation = micro_math.spearCorrelation(mas5_filtered,probes_filtered);
+			System.out.println("Schreibe berechnete Correlation in correlation.txt");
 			File dic = new File("output/ND_Group2_133Plus_2/coexpressed/");
 	        dic.mkdir();
 			output.writeCorrelationToTXT(mas5correlation,probes_filtered,"output/ND_Group2_133Plus_2/coexpressed/correlation.txt");
