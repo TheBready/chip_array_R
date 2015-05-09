@@ -25,13 +25,12 @@ public class micro_main {
 	public static void main(String[] args) throws IOException, InterruptedException{		
 		
 		// Start der Laufzeit-Messung
- 	  	long start = new Date().getTime();
+		long start = new Date().getTime();
 
 		// Getwd()
 		File currentDirectory = new File(new File(".").getAbsolutePath());
 		System.out.println(currentDirectory.getCanonicalPath());
 		System.out.println(currentDirectory.getAbsolutePath());
-		
 		
 		// Erstellen der Objekte der R-Skripte
         ExecuteR images = new ExecuteR("micro_array_R\\images.R");
@@ -43,7 +42,6 @@ public class micro_main {
         normalisation.start();
         images.start();
         
-
         // Warte auf Ende der R-Skripte
         normalisation.join();
         raw_analysis.join();
@@ -74,10 +72,7 @@ public class micro_main {
 	        pm.join();
 	        mm.join();
 	        pma.join();
-	        
-			System.out.println("test: "+mas5.inputString2D[0][1]);
-	
-
+	        	
 	        
 	 		// Namen der Chips
 	 		System.out.println("Lese Chip-Namen");
@@ -126,7 +121,13 @@ public class micro_main {
 			micro_math.SLR(filePath, 0.2);
 			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
 			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
-			
+		
+			// test for coexpressed Genes 
+			System.out.println("Teste auf coexpremierte Gene");
+			double[][] mas5correlation = micro_math.spearCorrelation(mas5_filtered,probes_filtered);
+			File dic = new File("output/ND_Group2_133Plus_2/coexpressed/");
+	        dic.mkdir();
+			output.writeCorrelationToTXT(mas5correlation,probes_filtered,"output/ND_Group2_133Plus_2/coexpressed/correlation.txt");
 			
 			for(int i = 0; i < Celnames.length; i++){
 				System.out.println(Celnames[i]);
@@ -136,7 +137,7 @@ public class micro_main {
 			long runningTime = new Date().getTime() - start; 
 	        System.out.println("Laufzeit: "+(runningTime/1000)+" Sekunden");
 
-	 	}
+		}
 		catch(IOException ex) {
 			System.err.println("Kein Output-Ordner... Bitte lassen Sie erst readCel.R laufen!");
 			ex.printStackTrace();

@@ -19,9 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
-
 import org.apache.commons.math3.stat.inference.TestUtils;
-
 
 public class micro_math {
 	
@@ -39,6 +37,78 @@ public class micro_math {
 		}
 		
 		return(doubleArray);
+	}
+
+	/////////////////////////////
+	// Check coexpressed Genes //
+	/////////////////////////////
+	public static double[][] spearCorrelation(double[][] data,String[] names){
+		int rows = data.length;
+		double[][] correlation = new double[rows][rows];
+		for(int i=0;  i < rows; i++){
+			for(int j=0;  j < rows; j++){
+				correlation[i][j] = spearCorrelation(data[i],data[j]);
+			}
+		}	
+		return(correlation);
+	}
+	
+	/////////////////////////
+	// Pearson Correlation //
+	/////////////////////////
+	public static double spearCorrelation(double[] sample1, double[] sample2){
+		//cor(X, Y) = Sum[(xi - E(X))(yi - E(Y))] / [(n - 1)s(X)s(Y)] 
+		double correlation = 0;
+		double sd1 = sd(sample1);
+		double sd2 = sd(sample2);
+		double mean1 = mean(sample1);
+		double mean2 = mean(sample2);
+		int elements = sample1.length;
+		for(int i=0;  i < elements; i++){
+			correlation = correlation + (sample1[i]-mean1)*(sample2[i]-mean2);
+		}
+		
+		correlation = correlation / ((elements-1)*sd1*sd2);
+		return(correlation);
+	}
+	
+	//////////
+	// Mean //
+	//////////
+	public static double mean(double[] list){
+		double mean = 0;
+		int elements = list.length;
+		for(int i=0;  i < elements; i++){
+			mean = mean + list[i];
+		}
+		
+		mean = mean/elements;
+		return(mean);
+	}
+	
+	//////////////
+	// Variance //
+	//////////////
+	public static double var(double[] list){
+		double var = 0;
+		int elements = list.length;
+		double meanList = mean(list);
+		for(int i=0;  i < elements; i++){
+			double step = list[i]-meanList;
+			var = var + step*step;  	
+		}
+		
+		var = var/elements;
+		return(var);
+	}
+
+	/////////////////////////
+	// Standard-derivation //
+	/////////////////////////
+	public static double sd(double[] list){
+		double var = var(list);
+		double sd = Math.sqrt(var);
+		return(sd);
 	}
 	
 	////////////

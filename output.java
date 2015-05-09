@@ -35,7 +35,7 @@ public class output {
 	// Output in .txt-Datei //
 	//////////////////////////
 	public static void writeTXT(String[] probes,String[] express, double[] values,String file) throws FileNotFoundException{
-	
+		
 	      PrintStream out = new PrintStream(new FileOutputStream(file));
 	        out.println("probes p-values expressed");
 	      for (int i = 0; i < values.length-1; i++){
@@ -44,4 +44,21 @@ public class output {
 	      out.close();	      
 	    }
 
+
+
+	//////////////////////////
+	// Output in .txt-Datei //
+	//////////////////////////
+	public static void writeCorrelationToTXT( double[][] data,String[] names,String file) throws FileNotFoundException{
+		
+		PrintStream out = new PrintStream(new FileOutputStream(file));
+		out.println("probes p-values expressed");
+		for (int i = 0; i < data.length-1; i++){
+			for (int j = 0; j < data.length-1; j++){
+				out.println(names[i]+" : "+names[j]+": "+data[i][j]);
+			}
+		}
+		out.close();	      
+    }
 }
+
