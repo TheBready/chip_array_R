@@ -92,9 +92,9 @@ public class micro_main {
 	 		double treshold = 0.8; 
 	 		boolean[][] present = micro_math.isPresent(pma.inputString2D,treshold);
 	 		
-			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
+			// Bestimmen der SLR-Werte
 			String filePath = currentDirectory.getCanonicalPath();
-			double[] slr = micro_math.SLR(filePath, 0.2);
+			double[] slr = micro_math.SLR(filePath);
 			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
 			
 	 		// Filtert alle raus die nicht exprimiert werden
