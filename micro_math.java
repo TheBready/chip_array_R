@@ -57,7 +57,7 @@ public class micro_math {
 	// Pearson Correlation //
 	/////////////////////////
 	public static double pearCorrelation(double[] sample1, double[] sample2){
-		//cor(X, Y) = Sum[(xi - E(X))(yi - E(Y))] / [(n - 1)s(X)s(Y)] 
+		//cor(X, Y) = (Sum[(xi - E(X))(yi - E(Y))] / [s(X)s(Y)])/n
 		double correlation = 0;
 		double sd1 = sd(sample1);
 		double sd2 = sd(sample2);
@@ -133,7 +133,7 @@ public class micro_math {
 	/////////////////
 	// Sort t-test //
 	/////////////////
-	public static void sortIt(double[] mas5test, String[] mas5Names, String[] express) {
+	public static void sortIt(double[] mas5test, String[] mas5Names, String[] express, double[] slr) {
 		for (int n = 0; n < mas5test.length-1; n++) {
 	        for (int m = 0; m < mas5test.length-2 - n; m++) {
 	            if ((mas5test[m]-mas5test[m + 1]) > 0) {
@@ -146,6 +146,9 @@ public class micro_math {
 	                String swapExpr = express[m];
 	                express[m] = express[m + 1];
 	                express[m + 1] = swapExpr;
+	                double swapSLR = slr[m];
+	                slr[m] = slr[m + 1];
+	                slr[m + 1] = swapSLR;
 	            }
 	        }
 	    }	  
@@ -221,17 +224,17 @@ public class micro_math {
 	///////////////////////
 	// Filter input Data //
 	///////////////////////
-	public static double[][] filterIt(boolean[][] present, double[][] mas5Double) {
+	public static double[][] filterIt(boolean[][] present, double[][] mas5Double, double[] slr) {
 		int size = 0; 
 		for (int i = 0; i < present.length; i++) {
-			if(present[i][0]||present[i][1]){
+			if((present[i][0]||present[i][1])&&(slr[i]>2)){
 				size++;
 			}
 		}
 		int counter = 0;
 		double[][] mas5_filtered = new double[size][2];
 		for (int n = 0; n < present.length; n++) {
-			if(present[n][0]||present[n][1]){
+			if((present[n][0]||present[n][1])&&(slr[n]>2)){
 				mas5_filtered[counter] = Arrays.copyOfRange(mas5Double[n], 0, 6);
 				counter++;
 			}
@@ -242,17 +245,17 @@ public class micro_math {
 	//////////////////////
 	// Filter Probe-IDs //
 	//////////////////////
-	public static String[] filterProbes(boolean[][] present, String[] probes) {
+	public static String[] filterProbes(boolean[][] present, String[] probes, double[] slr) {
 		int size = 0; 
 		for (int i = 0; i < probes.length; i++) {
-			if(present[i][0]||present[i][1]){
+			if((present[i][0]||present[i][1])&&(slr[i]>2)){
 				size++;			
 			}
 		}
 		int counter = 0;
 		String[] probes_filtered = new String[size];
 		for (int n = 0; n < present.length; n++) {
-			if(present[n][0]||present[n][1]){
+			if((present[n][0]||present[n][1])&&(slr[n]>2)){
 				probes_filtered[counter] = probes[n];
 				counter++;
 			}
