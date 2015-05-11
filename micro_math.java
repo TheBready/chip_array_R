@@ -335,7 +335,7 @@ public class micro_math {
 	///////////////////////
 	
 
-	public static double[] SLR(String folder, double thresholdFilter){
+	public static double[] SLR(String folder){
 			
 		// get directories ( works just for our path-system)
 		String MAS5dir = (folder + "\\output\\ND_Group2_133Plus_2\\MAS5\\ND_Group2_133Plus_2_MAS5_500.txt");
@@ -379,7 +379,7 @@ public class micro_math {
 		}
 
 		/////////////////////////////////
-		// count absent genes in chips //
+		// Get Line-Count in PMA-file  //
 		/////////////////////////////////
 		
 		int countedLines = 0;
@@ -389,83 +389,10 @@ public class micro_math {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		// counts for every line, how many values where absent
-		int[] counter = new int[countedLines];
 		
-		
-		try{
-			// read PMA.txt file content into buffer
-			rPMA = input.BfReader(PMAdir);
-			String countStr;
-			// to get the current position in the file
-			int currentLine = 0;
-			// save every line separate in countStr until there is no more 
-			while((countStr = rPMA.readLine())!=null) {
-				// count all absents in PMA.txt
-				for (int i=0; i < countStr.length()-1; ++i){
-					// look at PMA file to understand (typical PMA file line : "1552275_s_at A M M P P P") -> every letter represents one chiparray
-					if(countStr.charAt(i)== ' ' && countStr.charAt(i+1)=='A'){
-						counter[currentLine]++;
-					} // close if
-				// close for (int i=0; i < countStr.length()-1; ++i){
-				}
-				currentLine++;
-			}// close while((countStr = rPMA.readLine())!=null) {
-			// close stream
-			rPMA.close();
-		
-		// catch exceptions
-		} catch (FileNotFoundException e) {
-			System.out.println("Wrong file or directory.");
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		//////////////////////////////////
-		// create Filtered_MAS5_500.txt //
-		//////////////////////////////////
-				
 		
 		int currentLine = 0;
-		// get every line, which is higher than the threshold and store it in Filtered_MAS5_500.txt
-		try {
-			// create and write to file (windows)
-			rMAS5 = input.BfReader(MAS5dir);
-			//FileWriter PMA = null;
-			FileWriter MAS5 = null;
-			// create file Filtered_PMA.txt to get just the fitting values
-			//MAS5 = new FileWriter(""+f+"\\Filtered_MAS5_500.txt");
-			MAS5 = new FileWriter(""+f+"\\SLR_MAS5_500.txt");
-			//to store every line for one loop
-			String readLine;
-			// get every line from MAS5_500.txt and filter it based on the wanted value (parameter thresholdFilter)
-			while(( readLine = rMAS5.readLine())!= null){
-					//if more than 80% not absent 
-		            if ( (1- ((double)counter[currentLine] / (double)(size))) > thresholdFilter){
-		            	
-		            	// write lines to file
-						MAS5.write(readLine);
-						// to  save every separate line
-						MAS5.append( System.lineSeparator() );
-													
-		            }	// end if ( (1- ((double)counter[currentLine] / (double)(size))) > thresholdFilter){
-				currentLine++;
-				// writes buffer data to file but doesn't close it (for next while loop)
-				MAS5.flush();				
-			}	// end while			
-			// close stream
-			MAS5.close();
-			rMAS5.close();
-		// catch exceptions	
-		} catch (FileNotFoundException e) {
-			System.out.println("Wrong file or directory.");
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-				
+	
 		//////////////////////////////////
 		// finally calculate SLR Values //
 		//////////////////////////////////		
@@ -526,8 +453,6 @@ public class micro_math {
 		
 		return output;
 	} // end SLR
-	
-	
 	
 }
 
