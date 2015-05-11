@@ -92,10 +92,15 @@ public class micro_main {
 	 		double treshold = 0.8; 
 	 		boolean[][] present = micro_math.isPresent(pma.inputString2D,treshold);
 	 		
+			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
+			String filePath = currentDirectory.getCanonicalPath();
+			double[] slr = micro_math.SLR(filePath, 0.2);
+			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
+			
 	 		// Filtert alle raus die nicht exprimiert werden
 	 		System.out.println("Daten werden gefiltert");
-	 		double[][] mas5_filtered = micro_math.filterIt(present,mas5Double);
-	 		String[] probes_filtered = micro_math.filterProbes(present, mas5Names);
+	 		double[][] mas5_filtered = micro_math.filterIt(present,mas5Double,slr);
+	 		String[] probes_filtered = micro_math.filterProbes(present, mas5Names,slr);
 	 		
 	 		
 	 		//Erstellt Liste ob hoch oder niedrig exprimiert
@@ -108,22 +113,14 @@ public class micro_main {
 	 		System.out.println("Schreibe p-values in p-values.txt");
 			File tdic = new File("output/ND_Group2_133Plus_2/t-Test/");
 	        tdic.mkdir();
-	 		output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
+	 		output.writeTXT(probes_filtered,express,mas5test,slr,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
 	 		
 	 		//Merge and Sort
 	 		System.out.println("Bubble-Sort für p-values");
-	 		micro_math.sortIt(mas5test,probes_filtered,express);
+	 		micro_math.sortIt(mas5test,probes_filtered,express,slr);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
-			output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
-			
-			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
-			String filePath = currentDirectory.getCanonicalPath();
-			// Teststring
-			double[] SlrResults = new double[micro_math.countLines(filePath + "\\output\\ND_Group2_133Plus_2\\MAS5\\ND_Group2_133Plus_2_MAS5_500.txt")];
-	        SlrResults = micro_math.SLR(filePath, 0.2);
-			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
-			output.write1DDoubleToTXT(SlrResults,"output/ND_Group2_133Plus_2/SLR/pure_SLR_VALUES.txt");
-			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
+			output.writeTXT(probes_filtered,express,mas5test,slr,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+		
 		
 			// test for coexpressed Genes 
 			System.out.println("Teste auf coexpremierte Gene");
