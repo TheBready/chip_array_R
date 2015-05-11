@@ -332,7 +332,7 @@ public class micro_math {
 	///////////////////////
 	
 
-	public static void SLR(String folder, double thresholdFilter){
+	public static double[] SLR(String folder, double thresholdFilter){
 			
 		// get directories ( works just for our path-system)
 		String MAS5dir = (folder + "\\output\\ND_Group2_133Plus_2\\MAS5\\ND_Group2_133Plus_2_MAS5_500.txt");
@@ -433,7 +433,8 @@ public class micro_math {
 			//FileWriter PMA = null;
 			FileWriter MAS5 = null;
 			// create file Filtered_PMA.txt to get just the fitting values
-			MAS5 = new FileWriter(""+f+"\\Filtered_MAS5_500.txt");
+			//MAS5 = new FileWriter(""+f+"\\Filtered_MAS5_500.txt");
+			MAS5 = new FileWriter(""+f+"\\SLR_MAS5_500.txt");
 			//to store every line for one loop
 			String readLine;
 			// get every line from MAS5_500.txt and filter it based on the wanted value (parameter thresholdFilter)
@@ -472,10 +473,13 @@ public class micro_math {
 		// new file writer
 		FileWriter SLR = null;
 			
+		double[] output = new double[countedLines];
 
 		try {
 			
-			rMAS5 = input.BfReader(""+f+"\\Filtered_MAS5_500.txt");
+			//rMAS5 = input.BfReader(""+f+"\\Filtered_MAS5_500.txt");
+			rMAS5 = input.BfReader(MAS5dir);
+			//SLR = new FileWriter(""+f+"\\SLR_Values.txt");
 			SLR = new FileWriter(""+f+"\\SLR_Values.txt");
 			//save all slr-values in SLR_Values.txt
 			
@@ -500,6 +504,9 @@ public class micro_math {
 					SLR.write(splitLine[0] + "\t" + slrValue);
 					SLR.append( System.lineSeparator() );
 				
+					output[currentLine-1] = slrValue;	
+					
+					
 				} // end if (currentLine != 0) {
 				currentLine++;
 			} // end while loop (line 311)
@@ -514,6 +521,7 @@ public class micro_math {
 			e.printStackTrace();
 		}		
 		
+		return output;
 	} // end SLR
 	
 	

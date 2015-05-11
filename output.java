@@ -60,5 +60,22 @@ public class output {
 		}
 		out.close();	      
     }
+	
+		////////////////////////////
+	// Write double[] to .txt //
+	////////////////////////////
+	
+	public static void write1DDoubleToTXT (double[] data, String file ) throws FileNotFoundException{
+		
+		PrintStream out = new PrintStream(new FileOutputStream(file));
+		for (int i = 0; i < data.length-1; i++){
+			
+			out.println(data[i]);
+			
+		}
+		out.close();
+	}
+	
+	
 }
 

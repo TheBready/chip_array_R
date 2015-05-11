@@ -118,8 +118,11 @@ public class micro_main {
 			
 			//Erstellen der SLR Datei aus MAS5 (Filter auf 0.2 gesetzt)
 			String filePath = currentDirectory.getCanonicalPath();
-			micro_math.SLR(filePath, 0.2);
+			// Teststring
+			double[] SlrResults = new double[micro_math.countLines(filePath + "\\output\\ND_Group2_133Plus_2\\MAS5\\ND_Group2_133Plus_2_MAS5_500.txt")];
+	        SlrResults = micro_math.SLR(filePath, 0.2);
 			System.out.println("Schreibe berechnete SLR-Werte in SLR_Values.txt");
+			output.write1DDoubleToTXT(SlrResults,"output/ND_Group2_133Plus_2/SLR/pure_SLR_VALUES.txt");
 			//output.writeTXT(probes_filtered,express,mas5test,"output/ND_Group2_133Plus_2/SLR/SLR_Values.txt");	
 		
 			// test for coexpressed Genes 
