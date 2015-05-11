@@ -55,7 +55,7 @@ public class output {
 		out.println("probes p-values expressed");
 		for (int i = 0; i < data.length-1; i++){
 			for (int j = 0; j < data.length-1; j++){
-				out.println(names[i]+" : "+names[j]+": "+data[i][j]);
+				out.println(names[i]+" "+names[j]+" "+data[i][j]);
 			}
 		}
 		out.close();	      
