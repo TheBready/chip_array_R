@@ -24,7 +24,6 @@ import org.apache.commons.math3.stat.inference.TestUtils;
 
 public class micro_math {
 	
-	public double[] slrsorted;
 	
 	////////////////////////////////////////////
 	// convert string-array into double-array //
@@ -254,18 +253,39 @@ public class micro_math {
 			}
 		}
 		int counter = 0;
-		double[] newslr = new double[size];
 		double[][] mas5_filtered = new double[size][2];
 		for (int n = 0; n < present.length; n++) {
 			if((present[n][0]||present[n][1])&&(slr[n]>2.0)){
 				mas5_filtered[counter] = Arrays.copyOfRange(mas5Double[n], 0, 6);
-				newslr[counter] = slr[n];
 				counter++;				
 			}
 	    }
-		slr = newslr;
 		return(mas5_filtered);
 	}
+	
+	////////////////
+	// Filter SLR //
+	////////////////
+	public static double[] filterItSLR(boolean[][] present, double[] slr) {
+		int size = 0; 
+		for (int i = 0; i < present.length; i++) {
+			if((present[i][0]||present[i][1])&&(slr[i]>2.0)){
+				size++;
+			}
+		}
+		int counter = 0;
+		double[] slr_filtered = new double[size];
+		for (int n = 0; n < present.length; n++) {
+			if((present[n][0]||present[n][1])&&(slr[n]>2.0)){
+				slr_filtered[counter] = slr[n];
+				counter++;				
+			}
+	    }
+		return(slr_filtered);
+	}
+
+	
+	
 	
 	//////////////////////
 	// Filter Probe-IDs //

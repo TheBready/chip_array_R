@@ -101,6 +101,7 @@ public class micro_main {
 	 		System.out.println("Daten werden gefiltert");
 	 		double[][] mas5_filtered = micro_math.filterIt(present,mas5Double,slr);
 	 		String[] probes_filtered = micro_math.filterProbes(present, mas5Names,slr);
+	 		double[] slr_filtered = micro_math.filterItSLR(present, slr);
 	 		
 	 		//Erstellt Liste ob hoch oder niedrig exprimiert
 	 		System.out.println("Teste ob höher exprimiert in Gruppe 1 als Gruppe 2");
@@ -112,13 +113,13 @@ public class micro_main {
 	 		System.out.println("Schreibe p-values in p-values.txt");
 			File tdic = new File("output/ND_Group2_133Plus_2/t-Test/");
 	        tdic.mkdir();
-	 		output.writeTXT(probes_filtered,express,mas5test,slr,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
+	 		output.writeTXT(probes_filtered,express,mas5test,slr_filtered,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
 	 		
 	 		//Merge and Sort
 	 		System.out.println("Bubble-Sort für p-values");
-	 		micro_math.sortIt(mas5test,probes_filtered,express,slr);
+	 		micro_math.sortIt(mas5test,probes_filtered,express,slr_filtered);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
-			output.writeTXT(probes_filtered,express,mas5test,slr,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+			output.writeTXT(probes_filtered,express,mas5test,slr_filtered,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 		
 		
 			// test for coexpressed Genes filtered
@@ -148,4 +149,5 @@ public class micro_main {
 			ex.printStackTrace();
 		}	
 	}
+
 }
