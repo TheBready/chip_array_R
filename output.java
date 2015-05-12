@@ -37,7 +37,7 @@ public class output {
 	public static void writeTXT(String[] probes,String[] express, double[] values, double[] slr,String file) throws FileNotFoundException{
 		
 	      PrintStream out = new PrintStream(new FileOutputStream(file));
-	        out.println("probes p-values expressed");
+	        out.println("Probes p-Values Expressed SLR");
 	      for (int i = 0; i < values.length-1; i++){
 	        out.println(probes[i]+" "+values[i]+" "+express[i]+" "+slr[i]);
 	      }
@@ -52,7 +52,7 @@ public class output {
 	public static void writeCorrelationToTXT( double[][] data,String[] names,String file) throws FileNotFoundException{
 		
 		PrintStream out = new PrintStream(new FileOutputStream(file));
-		out.println("probes p-values expressed");
+		out.println("Gene1 Gene1 Correlation");
 		for (int i = 0; i < data.length-1; i++){
 			for (int j = 0; j < data.length-1; j++){
 				out.println(names[i]+" "+names[j]+" "+data[i][j]);
@@ -60,8 +60,22 @@ public class output {
 		}
 		out.close();	      
     }
+
+	//////////////////////////////////////////
+	// Output correlation all in .txt-Datei //
+	//////////////////////////////////////////
+	public static void writeCorrelationAllToTXT( double[] data,String[] names,String file, int Gene) throws FileNotFoundException{
+		
+		PrintStream out = new PrintStream(new FileOutputStream(file));
+		out.println("Gene1 Gene1 Correlation");
+		for (int i = 0; i < data.length-1; i++){
+			out.println(names[Gene]+" "+names[i]+" "+data[i]);
+		}
+		out.close();	      
+    }
+
 	
-		////////////////////////////
+	////////////////////////////
 	// Write double[] to .txt //
 	////////////////////////////
 	

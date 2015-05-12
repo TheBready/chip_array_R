@@ -88,7 +88,7 @@ public class micro_main {
 	 		double[][] mas5Double = micro_math.makeDouble(mas5.inputString2D);
 	 		
 	 		// Überprüft ob alle Present in Gruppe
-	 		System.out.println("Erstelle Matrix der Daten");
+	 		System.out.println("Prüfe auf Presence");
 	 		double treshold = 0.8; 
 	 		boolean[][] present = micro_math.isPresent(pma.inputString2D,treshold);
 	 		
@@ -101,7 +101,6 @@ public class micro_main {
 	 		System.out.println("Daten werden gefiltert");
 	 		double[][] mas5_filtered = micro_math.filterIt(present,mas5Double,slr);
 	 		String[] probes_filtered = micro_math.filterProbes(present, mas5Names,slr);
-	 		
 	 		
 	 		//Erstellt Liste ob hoch oder niedrig exprimiert
 	 		System.out.println("Teste ob höher exprimiert in Gruppe 1 als Gruppe 2");
@@ -122,13 +121,18 @@ public class micro_main {
 			output.writeTXT(probes_filtered,express,mas5test,slr,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 		
 		
-			// test for coexpressed Genes 
-			System.out.println("Teste auf coexpremierte Gene");
-			double[][] mas5correlation = micro_math.spearCorrelation(mas5_filtered,probes_filtered);
-			System.out.println("Schreibe berechnete Correlation in correlation.txt");
+			// test for coexpressed Genes filtered
+			System.out.println("Teste gefilterte Gene auf coexpremierte Gene");
+			double[][] mas5CorrelationFiltered = micro_math.spearCorrelation(mas5_filtered,probes_filtered);
+			System.out.println("Schreibe berechnete Correlation in correlation_filtered.txt");
 			File dic = new File("output/ND_Group2_133Plus_2/coexpressed/");
 	        dic.mkdir();
-			output.writeCorrelationToTXT(mas5correlation,probes_filtered,"output/ND_Group2_133Plus_2/coexpressed/correlation.txt");
+			output.writeCorrelationToTXT(mas5CorrelationFiltered,probes_filtered,"output/ND_Group2_133Plus_2/coexpressed/correlation_filtered.txt");
+			
+			// test for coexpressed Genes unfiltered
+			System.out.println("Teste alle Gene auf coexpremierte Gene");
+			micro_math.spearCorrelationAll(mas5Double,mas5Names);
+
 			
 			for(int i = 0; i < Celnames.length; i++){
 				System.out.println(Celnames[i]);

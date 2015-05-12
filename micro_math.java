@@ -19,9 +19,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+
 import org.apache.commons.math3.stat.inference.TestUtils;
 
 public class micro_math {
+	
+	public double[] slrsorted;
 	
 	////////////////////////////////////////////
 	// convert string-array into double-array //
@@ -51,6 +54,25 @@ public class micro_math {
 			}
 		}	
 		return(correlation);
+	}
+	
+	/////////////////////////////////
+	// Check all coexpressed Genes //
+	/////////////////////////////////
+	public static void spearCorrelationAll(double[][] data,String[] names){
+		int rows = data.length;
+		double[] correlation = new double[rows];
+		for(int i=0;  i < rows; i++){
+			 for(int j=0;  j < rows; j++){
+					correlation[j] = micro_math.pearCorrelation(data[i],data[j]);
+			 }
+			try {
+				System.out.println("Schreibe berechnete Correlation von Gen "+names[i]+" in coexpressed/"+names[i]+".txt");
+				output.writeCorrelationAllToTXT(correlation,names,"output/ND_Group2_133Plus_2/coexpressed/"+names[i]+".txt",i);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}	
 	}
 	
 	/////////////////////////
@@ -227,18 +249,21 @@ public class micro_math {
 	public static double[][] filterIt(boolean[][] present, double[][] mas5Double, double[] slr) {
 		int size = 0; 
 		for (int i = 0; i < present.length; i++) {
-			if((present[i][0]||present[i][1])&&(slr[i]>2)){
+			if((present[i][0]||present[i][1])&&(slr[i]>2.0)){
 				size++;
 			}
 		}
 		int counter = 0;
+		double[] newslr = new double[size];
 		double[][] mas5_filtered = new double[size][2];
 		for (int n = 0; n < present.length; n++) {
-			if((present[n][0]||present[n][1])&&(slr[n]>2)){
+			if((present[n][0]||present[n][1])&&(slr[n]>2.0)){
 				mas5_filtered[counter] = Arrays.copyOfRange(mas5Double[n], 0, 6);
-				counter++;
+				newslr[counter] = slr[n];
+				counter++;				
 			}
 	    }
+		slr = newslr;
 		return(mas5_filtered);
 	}
 	
@@ -248,14 +273,14 @@ public class micro_math {
 	public static String[] filterProbes(boolean[][] present, String[] probes, double[] slr) {
 		int size = 0; 
 		for (int i = 0; i < probes.length; i++) {
-			if((present[i][0]||present[i][1])&&(slr[i]>2)){
+			if((present[i][0]||present[i][1])&&(slr[i]>2.0)){
 				size++;			
 			}
 		}
 		int counter = 0;
 		String[] probes_filtered = new String[size];
 		for (int n = 0; n < present.length; n++) {
-			if((present[n][0]||present[n][1])&&(slr[n]>2)){
+			if((present[n][0]||present[n][1])&&(slr[n]>2.0)){
 				probes_filtered[counter] = probes[n];
 				counter++;
 			}
