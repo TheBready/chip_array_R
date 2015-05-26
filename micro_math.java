@@ -61,9 +61,13 @@ public class micro_math {
 	// Check all coexpressed Genes //
 	/////////////////////////////////
 	public static void pearCorrelationAll(double[][] data,String[] names){	
+		// Number of CPU-Cores
 		int cores = Runtime.getRuntime().availableProcessors();
+		// Creates the threadpool
 		ExecutorService threadPool = Executors.newFixedThreadPool(cores);
-		int rows = data.length;
+		//Anzahl der Gene
+		int rows = data.length;	
+		
 		for (int i = 0; i < rows; i++) {
 			int threadNumber = i;
 			threadPool.submit(new Runnable() {
@@ -81,10 +85,15 @@ public class micro_math {
 				}
 			});
 		}
+		
+		
+		// Schließe den threadpool
 		threadPool.shutdown();
+		
+		// Warte auf alle threads
         while (!threadPool.isTerminated()) {
-            System.out.println("Not all threads are finished...");
         }
+        
         System.out.println("Finished all threads");
 	}
 	
