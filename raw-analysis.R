@@ -103,6 +103,17 @@ mmdata <- function(data,dir,j,data.proGen){
   setwd("..")
 }
 
+############################
+# Ausgabe der Gene Symbols #
+############################
+writeSymbols <- function(data.proGen,dir,j){
+  print("Export Gene Symbols")
+  dir.create("symbols", showWarnings =FALSE)
+  setwd("symbols")
+  write.table(data.proGen, file = gsub('.{0}$', '_gene_symbols.txt', dir[j]), quote = FALSE, sep = " ")
+  setwd("..")
+}
+
 
 ###########
 # Density #
@@ -339,6 +350,8 @@ mainAnalyse<- function(resolution = 7500,scale = 500){
     
     # Aufrufen der Funktionen
     writeInfo(data)
+    
+    writeSymbols(data.proGen,dir,j)
     
     detectionCall(data,PNGnames,colors,CELnames)
                 
