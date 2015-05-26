@@ -19,11 +19,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.math3.stat.inference.TestUtils;
 
+import java.util.concurrent.ThreadPoolExecutor;
 public class micro_math {
-	
+		
 	
 	////////////////////////////////////////////
 	// convert string-array into double-array //
@@ -44,7 +48,7 @@ public class micro_math {
 	/////////////////////////////
 	// Check coexpressed Genes //
 	/////////////////////////////
-	public static double[][] spearCorrelation(double[][] data,String[] names){
+	public static double[][] pearCorrelationFiltered(double[][] data,String[] names){
 		int rows = data.length;
 		double[][] correlation = new double[rows][rows];
 		for(int i=0;  i < rows; i++){
@@ -58,22 +62,46 @@ public class micro_math {
 	/////////////////////////////////
 	// Check all coexpressed Genes //
 	/////////////////////////////////
-	public static void spearCorrelationAll(double[][] data,String[] names){
+	public static void pearCorrelationAll(double[][] data,String[] names){	
+		int cores = Runtime.getRuntime().availableProcessors();
+		ExecutorService threadPool = Executors.newFixedThreadPool(cores);
 		int rows = data.length;
-		double[] correlation = new double[rows];
-		for(int i=0;  i < rows; i++){
-			 for(int j=0;  j < rows; j++){
-					correlation[j] = micro_math.pearCorrelation(data[i],data[j]);
-			 }
-			try {
-				System.out.println("Schreibe berechnete Correlation von Gen "+names[i]+" in coexpressed/"+names[i]+".txt");
-				output.writeCorrelationAllToTXT(correlation,names,"output/ND_Group2_133Plus_2/coexpressed/"+names[i]+".txt",i);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-		}	
+		for (int i = 0; i < 1; i++) {
+			int threadNumber = i;
+			threadPool.submit(new Runnable() {
+				public void run() {
+					System.out.println("Thread "+threadNumber+" gestartet für "+names[threadNumber]+" ...");
+					double[] correlation = new double[rows];
+					for(int j=0;  j < rows; j++){
+						correlation[j] = micro_math.pearCorrelation(data[threadNumber],data[j]);
+					}
+					try {
+						output.writeCorrelationAllToTXT(correlation,names,"output/ND_Group2_133Plus_2/coexpressed/"+names[threadNumber]+".txt",threadNumber);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		threadPool.shutdown();
+        while (!threadPool.isTerminated()) {
+        
+        }
+		System.out.println("Done");
 	}
 	
+	/*
+	 for(int j=0;  j < rows; j++){
+			correlation[j] = micro_math.pearCorrelation(data[i],data[j]);
+	 }
+	try {
+		System.out.println("Schreibe berechnete Correlation von Gen "+names[i]+" in coexpressed/"+names[i]+".txt");
+		output.writeCorrelationAllToTXT(correlation,names,"output/ND_Group2_133Plus_2/coexpressed/"+names[i]+".txt",i);
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	}
+	
+	*/
 	/////////////////////////
 	// Pearson Correlation //
 	/////////////////////////

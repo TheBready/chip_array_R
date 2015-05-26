@@ -126,7 +126,7 @@ public class micro_main {
 		
 			// test for coexpressed Genes filtered
 			System.out.println("Teste gefilterte Gene auf coexpremierte Gene");
-			double[][] mas5CorrelationFiltered = micro_math.spearCorrelation(mas5_filtered,probes_filtered);
+			double[][] mas5CorrelationFiltered = micro_math.pearCorrelationFiltered(mas5_filtered,probes_filtered);
 			System.out.println("Schreibe berechnete Correlation in correlation_filtered.txt");
 			File dic = new File("output/ND_Group2_133Plus_2/coexpressed/");
 	        dic.mkdir();
@@ -134,7 +134,7 @@ public class micro_main {
 			
 			// test for coexpressed Genes unfiltered
 			System.out.println("Teste alle Gene auf coexpremierte Gene");
-			micro_math.spearCorrelationAll(mas5Double,mas5Names);
+			micro_math.pearCorrelationAll(mas5Double,mas5Names);
 
 			
 			for(int i = 0; i < Celnames.length; i++){
