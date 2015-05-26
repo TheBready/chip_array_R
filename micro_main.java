@@ -115,13 +115,13 @@ public class micro_main {
 			File tdic = new File("output/ND_Group2_133Plus_2/t-Test/");
 	        tdic.mkdir();
 	        String[] geneSymbols = micro_math.decodeProbes(symbols.inputString2D, probes_filtered);
-	 		output.writeTXT(probes_filtered,express,mas5test,slr_filtered,geneSymbols,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
+	 		output.writeTXT(probes_filtered,express,mas5test,slr_filtered,geneSymbols,mas5_filtered,Celnames,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
 	 		
 	 		//Merge and Sort
 	 		System.out.println("Bubble-Sort für p-values");
-	 		micro_math.sortIt(mas5test,probes_filtered,express,slr_filtered,geneSymbols);
+	 		micro_math.sortIt(mas5test,probes_filtered,express,slr_filtered,geneSymbols,mas5_filtered);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
-			output.writeTXT(probes_filtered,express,mas5test,slr_filtered,geneSymbols,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+			output.writeTXT(probes_filtered,express,mas5test,slr_filtered,geneSymbols,mas5_filtered,Celnames,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 		
 		
 			// test for coexpressed Genes filtered

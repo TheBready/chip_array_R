@@ -34,15 +34,22 @@ public class output {
 	//////////////////////////
 	// Output in .txt-Datei //
 	//////////////////////////
-	public static void writeTXT(String[] probes,String[] express, double[] values, double[] slr,String[] geneSymbols, String file) throws FileNotFoundException{
-		
-	      PrintStream out = new PrintStream(new FileOutputStream(file));
-	        out.println("Probes geneSymbols p-Values Expressed SLR");
-	      for (int i = 0; i < values.length; i++){
-	        out.println(probes[i]+" "+geneSymbols[i]+" "+values[i]+" "+express[i]+" "+slr[i]);
-	      }
-	      out.close();	      
+	public static void writeTXT(String[] probes,String[] express, double[] values, double[] slr,String[] geneSymbols, double[][] mas5, String[] Celnames, String file) throws FileNotFoundException{
+		PrintStream out = new PrintStream(new FileOutputStream(file));
+	    out.print("Probes geneSymbols p-Values Expressed SLR");
+		for (int n = 1; n < Celnames.length-1; n++){
+			out.print(" "+Celnames[n].substring(0, Celnames[n].lastIndexOf('.')));
+		}
+		out.println(" "+Celnames[Celnames.length-1].substring(0, Celnames[Celnames.length-1].lastIndexOf('.')));
+	    for (int i = 0; i < values.length; i++){
+	    	out.print(probes[i]+" "+geneSymbols[i]+" "+values[i]+" "+express[i]+" "+slr[i]);
+		    for (int j = 0; j < mas5[0].length-1; j++){
+		    	out.print(" "+mas5[i][j]);
+		    }
+		    out.println(" "+mas5[i][mas5[0].length-1]);
 	    }
+	    out.close();	      
+	}
 
 
 

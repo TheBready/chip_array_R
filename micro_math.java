@@ -154,7 +154,7 @@ public class micro_math {
 	/////////////////
 	// Sort t-test //
 	/////////////////
-	public static void sortIt(double[] mas5test, String[] mas5Names, String[] express, double[] slr, String[] symbols) {
+	public static void sortIt(double[] mas5test, String[] mas5Names, String[] express, double[] slr, String[] symbols, double[][] mas5_filtered) {
 		for (int n = 0; n < mas5test.length; n++) {
 	        for (int m = 0; m < mas5test.length-1 - n; m++) {
 	            if ((mas5test[m]-mas5test[m + 1]) > 0) {
@@ -173,6 +173,9 @@ public class micro_math {
 	                String swapSymbols = symbols[m];
 	                symbols[m] = symbols[m + 1];
 	                symbols[m + 1] = swapSymbols;
+	                double[] swapmas5 = mas5_filtered[m];
+	                mas5_filtered[m] = mas5_filtered[m + 1];
+	                mas5_filtered[m + 1] = swapmas5;
 	            }
 	        }
 	    }	  
