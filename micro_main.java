@@ -57,6 +57,7 @@ public class micro_main {
 	        input pm = new input("output/ND_Group2_133Plus_2/pm/ND_Group2_133Plus_2_signals_PM.txt");
 	        input mm = new input("output/ND_Group2_133Plus_2/mm/ND_Group2_133Plus_2_signals_MM.txt");
 	        input pma = new input("output/ND_Group2_133Plus_2/PMA/PMA_Calls.txt");
+	        input symbols = new input("output/ND_Group2_133Plus_2/symbols/ND_Group2_133Plus_2_gene_symbols.txt");
 
 	        // Starten des Einlesens
 	        raw.start();
@@ -64,7 +65,7 @@ public class micro_main {
 	        pm.start();
 	        mm.start();
 	        pma.start();
-	        
+	        symbols.start();
 
 	        // Warte auf Ende des Einlesens
 	        raw.join();
@@ -72,7 +73,7 @@ public class micro_main {
 	        pm.join();
 	        mm.join();
 	        pma.join();
-	        	
+	        symbols.join();	
 	        
 	 		// Namen der Chips
 	 		System.out.println("Lese Chip-Namen");
@@ -113,13 +114,14 @@ public class micro_main {
 	 		System.out.println("Schreibe p-values in p-values.txt");
 			File tdic = new File("output/ND_Group2_133Plus_2/t-Test/");
 	        tdic.mkdir();
-	 		output.writeTXT(probes_filtered,express,mas5test,slr_filtered,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
+	        String[] geneSymbols = micro_math.decodeProbes(symbols.inputString2D, probes_filtered);
+	 		output.writeTXT(probes_filtered,express,mas5test,slr_filtered,geneSymbols,"output/ND_Group2_133Plus_2/t-Test/p-values.txt");
 	 		
 	 		//Merge and Sort
 	 		System.out.println("Bubble-Sort für p-values");
-	 		micro_math.sortIt(mas5test,probes_filtered,express,slr_filtered);
+	 		micro_math.sortIt(mas5test,probes_filtered,express,slr_filtered,geneSymbols);
 			System.out.println("Schreibe sortierte p-values in p-values_sorted.txt");
-			output.writeTXT(probes_filtered,express,mas5test,slr_filtered,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
+			output.writeTXT(probes_filtered,express,mas5test,slr_filtered,geneSymbols,"output/ND_Group2_133Plus_2/t-Test/p-values_sorted.txt");	
 		
 		
 			// test for coexpressed Genes filtered

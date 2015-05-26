@@ -34,12 +34,12 @@ public class output {
 	//////////////////////////
 	// Output in .txt-Datei //
 	//////////////////////////
-	public static void writeTXT(String[] probes,String[] express, double[] values, double[] slr,String file) throws FileNotFoundException{
+	public static void writeTXT(String[] probes,String[] express, double[] values, double[] slr,String[] geneSymbols, String file) throws FileNotFoundException{
 		
 	      PrintStream out = new PrintStream(new FileOutputStream(file));
-	        out.println("Probes p-Values Expressed SLR");
-	      for (int i = 0; i < values.length-1; i++){
-	        out.println(probes[i]+" "+values[i]+" "+express[i]+" "+slr[i]);
+	        out.println("Probes geneSymbols p-Values Expressed SLR");
+	      for (int i = 0; i < values.length; i++){
+	        out.println(probes[i]+" "+geneSymbols[i]+" "+values[i]+" "+express[i]+" "+slr[i]);
 	      }
 	      out.close();	      
 	    }
@@ -53,8 +53,8 @@ public class output {
 		
 		PrintStream out = new PrintStream(new FileOutputStream(file));
 		out.println("Gene1 Gene1 Correlation");
-		for (int i = 0; i < data.length-1; i++){
-			for (int j = 0; j < data.length-1; j++){
+		for (int i = 0; i < data.length; i++){
+			for (int j = 0; j < data.length; j++){
 				out.println(names[i]+" "+names[j]+" "+data[i][j]);
 			}
 		}
@@ -68,7 +68,7 @@ public class output {
 		
 		PrintStream out = new PrintStream(new FileOutputStream(file));
 		out.println("Gene1 Gene1 Correlation");
-		for (int i = 0; i < data.length-1; i++){
+		for (int i = 0; i < data.length; i++){
 			out.println(names[Gene]+" "+names[i]+" "+data[i]);
 		}
 		out.close();	      

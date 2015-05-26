@@ -142,7 +142,7 @@ public class micro_math {
 		double[][] sample2 = new double[data.length][3];
 		double[] result = new double[data.length];
 
-		for(int i=0;  i < data.length-1; i++){	
+		for(int i=0;  i < data.length; i++){	
 			sample1[i] = Arrays.copyOfRange(data[i], 0, 3);
 			sample2[i] =  Arrays.copyOfRange(data[i], 3, 6);
 			result[i] = TestUtils.pairedTTest(sample1[i], sample2[i]);
@@ -154,9 +154,9 @@ public class micro_math {
 	/////////////////
 	// Sort t-test //
 	/////////////////
-	public static void sortIt(double[] mas5test, String[] mas5Names, String[] express, double[] slr) {
-		for (int n = 0; n < mas5test.length-1; n++) {
-	        for (int m = 0; m < mas5test.length-2 - n; m++) {
+	public static void sortIt(double[] mas5test, String[] mas5Names, String[] express, double[] slr, String[] symbols) {
+		for (int n = 0; n < mas5test.length; n++) {
+	        for (int m = 0; m < mas5test.length-1 - n; m++) {
 	            if ((mas5test[m]-mas5test[m + 1]) > 0) {
 	                double swapDouble = mas5test[m];
 	                mas5test[m] = mas5test[m + 1];
@@ -170,6 +170,9 @@ public class micro_math {
 	                double swapSLR = slr[m];
 	                slr[m] = slr[m + 1];
 	                slr[m + 1] = swapSLR;
+	                String swapSymbols = symbols[m];
+	                symbols[m] = symbols[m + 1];
+	                symbols[m + 1] = swapSymbols;
 	            }
 	        }
 	    }	  
@@ -181,7 +184,7 @@ public class micro_math {
 	public static String[] highOrLow(double[][] mas5Double) {
 		String[] express = new String[mas5Double.length];
 		
-		for (int n = 0; n < mas5Double.length-1; n++) {
+		for (int n = 0; n < mas5Double.length; n++) {
 			double group1 = (mas5Double[n][0]+mas5Double[n][1]+mas5Double[n][2])/3;
 			double group2 = (mas5Double[n][3]+mas5Double[n][4]+mas5Double[n][5])/3;
 			if (group1 > group2){
@@ -200,7 +203,7 @@ public class micro_math {
 	////////////////////////
 	public static boolean[][] isPresent(String[][] pma, double treshold) {
 		boolean[][] present = new boolean[pma.length][2];
-		for (int n = 1; n < pma.length-1; n++) {
+		for (int n = 1; n < pma.length; n++) {
 			double group1count = 0;
 			double group2count = 0;
 			boolean group1 = false;
@@ -307,6 +310,31 @@ public class micro_math {
 	    }
 		return(probes_filtered);
 	}
+	
+	//////////////////////
+	// decode Probe-IDs //
+	//////////////////////
+	public static String[] decodeProbes(String[][] symbols, String[] probes) {
+		String[] probes_decoded = new String[probes.length];
+		for (int i = 0; i < probes.length; i++) {
+			for (int j = 1; j < symbols.length; j++) {
+				if(symbols[j][1].equals(probes[i])){
+					probes_decoded[i] = symbols[j][2];
+					break;
+				}
+				else if (j+1 == symbols.length){
+					probes_decoded[i] = "unknown";
+					break;
+		        }
+			}
+		}
+		return(probes_decoded);
+	}
+	
+	
+
+
+	
     ///////////////////////////////
 	// Log to base 2 calculation //
 	///////////////////////////////
