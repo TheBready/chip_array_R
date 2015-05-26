@@ -21,11 +21,9 @@ import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.math3.stat.inference.TestUtils;
 
-import java.util.concurrent.ThreadPoolExecutor;
 public class micro_math {
 		
 	
@@ -66,7 +64,7 @@ public class micro_math {
 		int cores = Runtime.getRuntime().availableProcessors();
 		ExecutorService threadPool = Executors.newFixedThreadPool(cores);
 		int rows = data.length;
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < rows; i++) {
 			int threadNumber = i;
 			threadPool.submit(new Runnable() {
 				public void run() {
@@ -85,9 +83,9 @@ public class micro_math {
 		}
 		threadPool.shutdown();
         while (!threadPool.isTerminated()) {
-        
+            System.out.println("Not all threads are finished...");
         }
-		System.out.println("Done");
+        System.out.println("Finished all threads");
 	}
 	
 	/*
