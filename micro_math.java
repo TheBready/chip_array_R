@@ -86,14 +86,13 @@ public class micro_math {
 			});
 		}
 		
-		
-		// Schlieﬂe den threadpool
-		threadPool.shutdown();
-		
 		// Warte auf alle threads
         while (!threadPool.isTerminated()) {
         }
         
+        // Schlieﬂe den threadpool
+		threadPool.shutdown();
+		
         System.out.println("Finished all threads");
 	}
 	
